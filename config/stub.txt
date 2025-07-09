@@ -1,0 +1,4 @@
+read h:int w:int
+loop h read row:string(w)
+gameloop
+write y1 x1 y2 x2 colour_identifier

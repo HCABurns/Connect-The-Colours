@@ -1,0 +1,8 @@
+{
+  "title": {
+    "2": "Medium Validator"
+  },
+  "testIn": "5 5\n123..\n..24.\n.4...\n...3.\n..1..",
+  "isTest": "false",
+  "isValidator": "true"
+}

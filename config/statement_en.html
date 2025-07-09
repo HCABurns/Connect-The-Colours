@@ -7,10 +7,8 @@
       <span>The Goal</span>
     </h1>
     <div class="statement-goal-content">
-      The aim of this game is to win.
-      <br>
-      <br>
-      For this question, you will be asked to output a single line as a solution.
+      Link the Colours is a logical puzzle that involves connecting pairs of matching colours in a closed grid.
+      The objective is to connect <b>ALL</b> pairs of identical colours with non-overlapping paths, using <b>EVERY</b> tile.
     </div>
   </div>
   <!-- RULES -->
@@ -20,67 +18,57 @@
       <span>Rules</span>
     </h1>
     <div>
-      <div class="statement-rules-content">Your program receives characters.<br>
-        Your actions have an effect.<br>
-        <br>
-        The game zone works as follows:
+      <div class="statement-rules-content">
         <ul>
-          <li>There are coordinates.</li>
-        </ul>
-        <br>
-        The units work as follows:
-        <ul>
-          <li>They move around.</li>
-        </ul>
-        You <strong>lose</strong> if:
-        <ul>
-          <li>You mess up.</li>
-          <li>You do not supply a valid sequence of actions.</li>
+          <li>Paths must consist of one or more horizontal and vertical segments to connect adjacent tiles.</li>
+          <li>Each colour must be connected to the other instance of the same colour using a continuous path.</li>
+          <li>A single tile can only be used in <b>ONE</b> path and any two paths <b>CANNOT</b> overlap or cross each other.</li>
+          <li>Paths must remain entirely within the grid boundaries.</li>
+          <li>Every tile must be used in a path, so that there are no empty tiles remaining.</li>
         </ul>
       </div>
     </div>
   </div>
-  <!-- EXPERT RULES -->
-  <div class="statement-section statement-expertrules">
-    <h1>
-      <span class="icon icon-expertrules">&nbsp;</span>
-      <span>Expert Rules</span>
-    </h1>
-    <div class="statement-expert-rules-content">
-      If you're going to run local simulations, you'll need to know this!
-    </div>
-  </div>
-  <!-- EXAMPLES -->
-  <div class="statement-section statement-examples">
-    <h1>
-      <span class="icon icon-example">&nbsp;</span>
-      <span>Example</span>
-    </h1>
 
-    <div class="statement-examples-text">
-      A basic situation, an instruction, a result.
+  <!-- VICTORY CONDITIONS -->
+  <div class="statement-victory-conditions">
+    <div class="icon victory"></div>
+    <div class="blk">
+      <div class="title">Victory Conditions</div>
+      <div class="text">
+        <ul style="padding-bottom: 0;">
+          <li>
+            All colours are connected to their respective identical colour, in a continuous path and without overlaps or crossovers.
+          </li>
+        </ul>
+      </div>
     </div>
+  </div>
 
-  </div>
-  <!-- WARNING -->
-  <div class="statement-section statement-warning">
-    <h1>
-      <span class="icon icon-warning">&nbsp;</span>
-      <span>Note</span>
-    </h1>
-    <div class="statement-warning-content">
-      <b>Don’t forget to run the tests by launching them from the “Test cases” window</b>. You can submit at any time
-      to recieve a score against the training validators. <b>You can submit as many times as you like</b>. Your most
-      recent submission will be used for the final ranking.<br>
-      <br>
-      <strong>Warning:</strong> the validation tests used to compute the final score are not the same as the ones used
-      during the event.
-      Harcoded solutions will not score highly.<br>
-      <br>
-      Don't hesitate to change the viewer's options to help debug your code (<img style="opacity:.8;background:#20252a;"
-        height="18" src="https://www.codingame.com/servlet/fileservlet?id=3463235186409" width="18">).
+  <!-- Loss CONDITIONS -->
+  <div class="statement-lose-conditions">
+    <div class="icon lose"></div>
+    <div class="blk">
+      <div class="title">Loss Conditions</div>
+      <div class="text">
+        <ul style="padding-bottom: 0;">
+          <li>Attempted to reassign a starting tile to a different colour.
+          </li>
+          <li>Attempted to connect a tile with more than two connections.
+          </li>
+          <li>Attempted to connect two tiles that are not in a straight path vertically or horizontally.
+          </li>
+          <li>Attempted to connect a tile outside the provided puzzle dimensions.
+          </li>
+          <li>Attempted to reassign a section of a path.
+          </li>
+          <li>Attempted to connect more than one path to a starting tile.
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
+
   <!-- PROTOCOL -->
   <div class="statement-section statement-protocol">
     <h1>
@@ -89,15 +77,12 @@
     </h1>
     <!-- Protocol block -->
     <div class="blk">
-      <div class="text">The program must first read the initialization data from standard input. Then, provide to the
-        standard output one line with ...</div>
-    </div>
-
-    <!-- Protocol block -->
-    <div class="blk">
       <div class="title">Input</div>
       <div class="text">
-        <p><span class="statement-lineno">Line 1: </span>one string <var>...</var>, the ...</p>
+        <p><span class="statement-lineno">Line 1: </span>Space separated integers <var>h</var> <var>w</var> representing the height and width of the puzzle.</p>
+        <p><span class="statement-lineno">Next <var>h</var> Lines: </span> String of length <var>w</var> representing a portion of the puzzle.</p>
+        <p> <em>Integers are used to define colours. Matching integers represent the same colour.</em> </p>
+        <p> <em>The full stop character (<const>.</const>) indicates an empty tile that can be used as part of a path.</em> </p>
       </div>
     </div>
 
@@ -105,7 +90,14 @@
     <div class="blk">
       <div class="title">Output</div>
       <div class="text">
-        <span class="statement-lineno">A single line</span> containing ...
+        <span class="statement-lineno">A single line</span> containing integers in the form <var>y1</var> <var>x1</var> <var>y2</var> <var>x2</var> <var>colour</var>.
+        <ul>
+          <li> <var>y1</var> - Y coordinate of the first tile.
+          <li> <var>x1</var> - X coordinate of the first tile.
+          <li> <var>y2</var> - Y coordinate of the second tile.
+          <li> <var>x1</var> - X coordinate of the second tile.
+          <li> <var>colour</var> - Colour identifier.
+        </ul>
         <br>
       </div>
     </div>
@@ -113,20 +105,10 @@
     <!-- Protocol block -->
     <div class="blk">
       <div class="title">Constraints</div>
-      <div class="text"><var>...</var> contains between 1 and 500 characters.<br>
-        <br>Allotted response time to output
-        is ≤ <const>2</const> seconds.</div>
-    </div>
-  </div>
-  <!-- STORY -->
-  <div class="statement-story-background">
-    <div class="statement-story-cover" style="background-size: cover; background-image: url(https://www.codingame.com/servlet/fileservlet?id=2210505809934)">
-      <div class="statement-story">
-        <h1>Title</h1>
-        <div class="story-text">Story
-          <br>
-          Totally optional</div>
-      </div>
+        <div class="text"> 3 ≤ <var>h</var>, <var>w</var> ≤ 10<br>
+          Allotted response time for first output is <const>3</const> seconds.<br>
+          Allotted response time for turn outputs is <const>50</const> ms.<br>
+          Turn limit is <const>50</const> turns.</div>
     </div>
   </div>
 </div>

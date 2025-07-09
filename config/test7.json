@@ -1,0 +1,8 @@
+{
+  "title": {
+    "2": "All Colours Test"
+  },
+  "testIn":"3 9\n123456789\n.........\n123456789",
+  "isTest": "true",
+  "isValidator": "true"
+}
