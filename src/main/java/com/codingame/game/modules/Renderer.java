@@ -14,7 +14,7 @@ import com.google.inject.Inject;
 import java.io.Serializable;
 import java.util.*;
 
-public class MyModule implements Module {
+public class Renderer implements Module {
     private final SoloGameManager<Player> gameManager;
     private final List<Map<String, Serializable>> allTiles = new ArrayList<>();
     private final GraphicEntityModule graphicEntityModule;
@@ -27,7 +27,7 @@ public class MyModule implements Module {
 
 
     @Inject
-    public MyModule(SoloGameManager<Player> gameManager, GraphicEntityModule graphicEntityModule) {
+    public Renderer(SoloGameManager<Player> gameManager, GraphicEntityModule graphicEntityModule) {
         this.gameManager = gameManager;
         this.graphicEntityModule = graphicEntityModule;
         graphicEntityModule.createSprite().setImage(Constants.BACKGROUND_SPRITE).setZIndex(Z_BACKGROUND);
@@ -36,7 +36,6 @@ public class MyModule implements Module {
     }
 
 
-    // Called from Referee
     public void addErrorTile(int id, String texture) {
         for (Map<String, Serializable> map : allTiles){
             if (map.get("id") == (Serializable) id){
@@ -44,6 +43,7 @@ public class MyModule implements Module {
             }
         }
     }
+
 
     public void setErrorTiles(Board board){
         for (int i = 0 ; i < board.getHeight(); i++) {
@@ -75,7 +75,7 @@ public class MyModule implements Module {
 
         tiles.add(new Tile(tile.getId(), number, tile));
         addTile(tile.getId(), tileName, number);
-        group.add(tile); // this line causes the error
+        group.add(tile);
     }
 
     public void drawConnector(int y1, int x1, int y2, int x2, char number){
@@ -124,7 +124,6 @@ public class MyModule implements Module {
     }
 
     public void scaleGroup(int w, int h){
-        System.out.println(w + " " + h);
         // Calculate total grid size in pixels
         int gridWidth = w * Constants.CELL_SIZE;
         int gridHeight = h * Constants.CELL_SIZE;
@@ -142,15 +141,9 @@ public class MyModule implements Module {
         int centerX = Constants.VIEWER_WIDTH / 2;
         int centerY = Constants.VIEWER_HEIGHT / 2;
 
-        System.out.println(centerX + " | " + scaledWidth + " | " + (centerX - scaledWidth / 2));
-        System.out.println(centerY + " | " + scaledHeight + " | " + (centerY - scaledHeight / 2));
-
         group.setScale(scale);
         group.setX(centerX - scaledWidth / 2);
         group.setY(centerY - scaledHeight / 2);
-
-        System.out.println(group.getX() + " " + group.getY() + " " + scale);
-
     }
 
     public Group getGroup(){
@@ -165,14 +158,14 @@ public class MyModule implements Module {
     public void onAfterGameTurn() {
         Map<String, Serializable> data = new HashMap<>();
         data.put("tiles", (Serializable) allTiles);
-        gameManager.setViewData("MyModule", data);
+        gameManager.setViewData("Renderer", data);
     }
 
     @Override
     public void onGameInit() {
         Map<String, Serializable> data = new HashMap<>();
         data.put("tiles", (Serializable) allTiles);
-        gameManager.setViewData("MyModule", data);
+        gameManager.setViewData("Renderer", data);
 
     }
 

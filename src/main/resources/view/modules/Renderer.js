@@ -1,8 +1,8 @@
 import { api as entityModule } from '../entity-module/GraphicEntityModule.js';
 
-export class MyModule {
+export class Renderer {
   static get moduleName() {
-    return 'MyModule';
+    return 'Renderer';
   }
 
   handleFrameData(frameInfo, frameData) {

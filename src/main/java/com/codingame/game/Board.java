@@ -1,14 +1,11 @@
 package com.codingame.game;
 
-import com.codingame.game.modules.MyModule;
-import com.google.inject.Inject;
-
 import java.util.*;
 
 public class Board {
 
-    private int h = 0;
-    private int w = 0;
+    private int h;
+    private int w;
     private final ArrayList<char[]> grid = new ArrayList<>();
     private final ArrayList<char[]> startGrid = new ArrayList<>();
     private final Set<Coordinate> startColours = new HashSet<>();
@@ -30,7 +27,6 @@ public class Board {
 
     public void addConnections(int y1, int x1, int y2, int x2, char colourIdentifier){
         // Create the link between the moves.
-        int horizontal_direction = 0;
         int vertical_direction = 0;
 
         if (y1 != y2){

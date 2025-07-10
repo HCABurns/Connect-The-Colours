@@ -1,7 +1,7 @@
 package com.codingame.game;
 import java.util.*;
 
-import com.codingame.game.modules.MyModule;
+import com.codingame.game.modules.Renderer;
 import com.codingame.gameengine.module.viewport.ViewportModule;
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
@@ -13,7 +13,7 @@ public class Referee extends AbstractReferee {
     @Inject private SoloGameManager<Player> gameManager;
     @Inject private GraphicEntityModule graphicEntityModule;
     @Inject private ViewportModule viewportModule;
-    @Inject private MyModule module;
+    @Inject private Renderer module;
 
     // Define the required variables.
     private Board board;
@@ -53,6 +53,7 @@ public class Referee extends AbstractReferee {
         // Scale the group to fit inside the frame - Also add to viewport for scrolling.
         module.scaleGroup(board.getWidth(), board.getHeight());
         module.getGroup().setZIndex(module.getZ_UI());
+
         // Add the group to the viewport.
         viewportModule.createViewport(module.getGroup());
     }
@@ -117,10 +118,10 @@ public class Referee extends AbstractReferee {
         try{
             if (arr.length != 5){throw new Exception("Error: Incorrect number of inputs.");}
             // Convert values to the inputs.
-            int y1 = Integer.parseInt(arr[0]);
-            int x1 = Integer.parseInt(arr[1]);
-            int y2 = Integer.parseInt(arr[2]);
-            int x2 = Integer.parseInt(arr[3]);
+            int x1 = Integer.parseInt(arr[0]);
+            int y1 = Integer.parseInt(arr[1]);
+            int x2 = Integer.parseInt(arr[2]);
+            int y2 = Integer.parseInt(arr[3]);
             int number = Integer.parseInt(arr[4]);
             if ((y1+x1) < (y2+x2)) {
                 values[0] = y1;values[1] = x1;values[2] = y2;values[3] = x2;

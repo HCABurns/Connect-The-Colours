@@ -79,7 +79,7 @@ public class Agent1 {
             while (path.size() > 1) {
                 int[] pos1 = path.pollFirst();
                 int[] pos2 = path.peekFirst();
-                System.out.println(pos1[0] + " " +pos1[1] + " " + pos2[0] + " " + pos2[1] + " " + c);
+                System.out.println(pos1[1] + " " +pos1[0] + " " + pos2[1] + " " + pos2[0] + " " + c);
             }
         }
     }
