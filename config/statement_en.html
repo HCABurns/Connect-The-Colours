@@ -27,6 +27,7 @@
           <li>Every tile must be used in a path, so that there are no empty tiles remaining.</li>
         </ul>
       </div>
+      The top-left corner is positioned at coordinates (<const>0</const>,<const>0</const>) and the bottom-right is positioned at coordinates (<var>w-1</var>,<var>h-1</var>).
     </div>
   </div>
 
@@ -52,10 +53,10 @@
       <div class="title">Loss Conditions</div>
       <div class="text">
         <ul style="padding-bottom: 0;">
+          <li>Response time exceeds the time limit.</li>
+          <li>The output is not properly formatted.</li>
           <li>Attempted to create an invalid path.</li>
           <li>Number of turns exceeds the turn limit.</li>
-          <li>The output is not properly formatted.</li>
-          <li>Response time exceeds the time limit.</li>
         </ul>
       </div>
     </div>
@@ -80,7 +81,7 @@
 
     <!-- Protocol block -->
     <div class="blk">
-      <div class="title">Output</div>
+      <div class="title">Output per turn</div>
       <div class="text">
         <span class="statement-lineno">A single line</span> containing integers in the form <var>x1</var> <var>y1</var> <var>x2</var> <var>y2</var> <var>colour</var>.
         <ul>
@@ -90,7 +91,9 @@
           <li> <var>y2</var> - Y-Coordinate of the second tile.
           <li> <var>colour</var> - Colour identifier.
         </ul>
-        This will create a section of a path from the first coordinate, to the second coordinate and will be in the colour denoted by the colour identifier.
+        This will create a section of a path from the first tile, to the second tile and will be in the colour denoted by the colour identifier.<br>
+        Tiles <b>MUST</b> be in the same plane either horizontal or vertical (<var>x1</var> = <var>x2</var> <b>OR</b> <var>y1</var> = <var>y2</var>).
+      
         <br>
       </div>
     </div>
@@ -104,7 +107,8 @@
     
     <div class="statement-examples-text">
       <span class="statement-lineno">Input:</span><br>
-      <tt>1.2<br>
+      <tt>3 3<br>
+      1.2<br>
       ...<br>
       .12</tt><br><br>
 
@@ -117,7 +121,6 @@
       2 1 2 2 2 <br>
       </tt>
     </div>
-
   </div>
 
     <!-- Protocol block -->

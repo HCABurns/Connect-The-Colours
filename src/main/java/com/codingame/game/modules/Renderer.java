@@ -1,9 +1,6 @@
 package com.codingame.game.modules;
 
-import com.codingame.game.Board;
-import com.codingame.game.Constants;
-import com.codingame.game.Player;
-import com.codingame.game.Tile;
+import com.codingame.game.*;
 import com.codingame.gameengine.core.Module;
 import com.codingame.gameengine.core.SoloGameManager;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
@@ -20,17 +17,14 @@ public class Renderer implements Module {
     private final GraphicEntityModule graphicEntityModule;
     private final Group group;
     private final ArrayList<Tile> tiles = new ArrayList<>();// Constants
-    private final int Z_BACKGROUND = 0;
-    private final int Z_TILES = 5;
-    private final int Z_CONNECTORS = 10;
-    private final int Z_UI = 20;
 
 
     @Inject
     public Renderer(SoloGameManager<Player> gameManager, GraphicEntityModule graphicEntityModule) {
         this.gameManager = gameManager;
         this.graphicEntityModule = graphicEntityModule;
-        graphicEntityModule.createSprite().setImage(Constants.BACKGROUND_SPRITE).setZIndex(Z_BACKGROUND);
+        int z_BACKGROUND = 0;
+        graphicEntityModule.createSprite().setImage(Constants.BACKGROUND_SPRITE).setZIndex(z_BACKGROUND);
         group = graphicEntityModule.createGroup();
         gameManager.registerModule(this);
     }
@@ -46,11 +40,9 @@ public class Renderer implements Module {
 
 
     public void setErrorTiles(Board board){
-        for (int i = 0 ; i < board.getHeight(); i++) {
-            for (int j = 0; j < board.getWidth(); j++) {
-                if (board.getGrid().get(i)[j] == '.') {
-                    addErrorTile(tiles.get(i * board.getWidth() + j).getId(), Constants.ERROR_TILE_MAPPER.get(board.getStartGrid().get(i)[j]));
-                }
+        for (Coordinate coord : board.getErrorTiles()){
+            if (coord.getY() * board.getWidth() + coord.getX() < board.getWidth() * board.getHeight() - 1) {
+                addErrorTile(tiles.get(coord.getY() * board.getWidth() + coord.getX()).getId(), Constants.ERROR_TILE_MAPPER.get(board.getStartGrid().get(coord.getY())[coord.getX()]));
             }
         }
     }
@@ -66,12 +58,13 @@ public class Renderer implements Module {
         if (Constants.START_TILE_MAPPER.containsKey(number)){
             tileName = Constants.START_TILE_MAPPER.get(number);
         }
+        int z_TILES = 5;
         Sprite tile = graphicEntityModule.createSprite()
                 .setImage(tileName)
                 .setX(j * Constants.CELL_SIZE)
                 .setY(i * Constants.CELL_SIZE)
                 .setAnchor(0)
-                .setZIndex(Z_TILES);
+                .setZIndex(z_TILES);
 
         tiles.add(new Tile(tile.getId(), number, tile));
         addTile(tile.getId(), tileName, number);
@@ -93,24 +86,28 @@ public class Renderer implements Module {
             else{vertical_direction = -1;}
         }
         int connectors_to_build = Math.abs(y1 - y2) + Math.abs(x1 - x2);
+        Sprite sprite = null;
         for (int i = 0; i <= connectors_to_build; i++) {
+            int z_CONNECTORS = 10;
             if (vertical_direction != 0 && i != connectors_to_build) {
-                group.add(graphicEntityModule.createSprite()
+                sprite = graphicEntityModule.createSprite()
                         .setImage(ySprite)
                         .setX((x1) * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET)
                         .setY((y1 + (i * vertical_direction)) * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET)
                         .setAnchor(0)
-                        .setZIndex(Z_CONNECTORS)
-                        .setScale(1));
+                        .setZIndex(z_CONNECTORS)
+                        .setScale(1);
+                group.add(sprite);
             }
             else if (horizontal_direction != 0 && i != connectors_to_build) {
-                group.add(graphicEntityModule.createSprite()
+                sprite = graphicEntityModule.createSprite()
                         .setImage(xSprite)
                         .setX((x1 + i * horizontal_direction) * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET)
                         .setY(y1 * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET)
                         .setAnchor(0)
-                        .setZIndex(Z_CONNECTORS)
-                        .setScale(1));
+                        .setZIndex(z_CONNECTORS)
+                        .setScale(1);
+                group.add(sprite);
             }
         }
     }
@@ -151,7 +148,7 @@ public class Renderer implements Module {
     }
 
     public int getZ_UI() {
-        return Z_UI;
+        return 20;
     }
 
     @Override
@@ -166,7 +163,6 @@ public class Renderer implements Module {
         Map<String, Serializable> data = new HashMap<>();
         data.put("tiles", (Serializable) allTiles);
         gameManager.setViewData("Renderer", data);
-
     }
 
     @Override

@@ -13,7 +13,7 @@ public class Referee extends AbstractReferee {
     @Inject private SoloGameManager<Player> gameManager;
     @Inject private GraphicEntityModule graphicEntityModule;
     @Inject private ViewportModule viewportModule;
-    @Inject private Renderer module;
+    @Inject private Renderer renderer;
 
     // Define the required variables.
     private Board board;
@@ -47,15 +47,15 @@ public class Referee extends AbstractReferee {
             char[] row = gameManager.getTestCaseInput().get(i).toCharArray();
             board.drawPuzzle(i - 1, row);
             for (int j = 0; j < row.length; j++){
-                module.drawTile(row[j], i-1, j);
+                renderer.drawTile(row[j], i-1, j);
             }
         }
         // Scale the group to fit inside the frame - Also add to viewport for scrolling.
-        module.scaleGroup(board.getWidth(), board.getHeight());
-        module.getGroup().setZIndex(module.getZ_UI());
+        renderer.scaleGroup(board.getWidth(), board.getHeight());
+        renderer.getGroup().setZIndex(renderer.getZ_UI());
 
         // Add the group to the viewport.
-        viewportModule.createViewport(module.getGroup());
+        viewportModule.createViewport(renderer.getGroup());
     }
 
     @Override
@@ -77,46 +77,47 @@ public class Referee extends AbstractReferee {
 
                 // Draw the connection(s) that the user has provided.
                 board.addConnections(y1, x1, y2, x2, number);
-                module.drawConnector(y1, x1, y2, x2, number);
+                //renderer.drawConnector(y1, x1, y2, x2, number);
 
                 // Check if the grid is valid.
-                if (!board.isEmptyTiles()){
+                if (board.isEnded()){ //connections need to be h*w - start
                     boolean valid = board.checkWin();
                     if (valid) {
-                        module.addCompletedTiles(board);
-                        gameManager.setFrameDuration(100*board.getHeight()* board.getWidth());
+                        renderer.addCompletedTiles(board);
+                        gameManager.setFrameDuration(50*board.getHeight()* board.getWidth());
                         gameManager.winGame("Successfully connected all colours!");
                     }
                     else{
-                        end("Not all connected...");}
+                        end("Not all lines are connected in a continuous manner.");}
                 }
             }else{
                 if (errorMessage == null){
                     errorMessage = "Not all lines are connected in a continuous manner.";
                 }
-                gameManager.setFrameDuration(100*board.getUnconnected());
+                gameManager.setFrameDuration(50*board.getUnconnected());
+                gameManager.setFrameDuration(2000);
                 end(errorMessage);
             }
         }
         catch (TimeoutException e) {
-            end("Timeout");
+            end("Timeout...");
         }
     }
 
     public void end(String m){
-        module.setErrorTiles(board);
+        renderer.setErrorTiles(board);
         gameManager.loseGame(m);
     }
 
 
     public int[] checkOutputs(List<String> outputs){
 
-        if (outputs.size() != 1){gameManager.loseGame("You did not send an output.");}
+        if (outputs.size() != 1){gameManager.loseGame("You did not send a single input.");}
         String[] arr = outputs.get(0).split(" ");
         int[] values = new int[5];
 
         try{
-            if (arr.length != 5){throw new Exception("Error: Incorrect number of inputs.");}
+            if (arr.length != 5){throw new Exception("Incorrect number of inputs provided.");}
             // Convert values to the inputs.
             int x1 = Integer.parseInt(arr[0]);
             int y1 = Integer.parseInt(arr[1]);
@@ -130,19 +131,55 @@ public class Referee extends AbstractReferee {
             }
             values[4] = number;
 
+            // Complete general checks on the input. (Bounds and Valid colour)
+            generalChecks(values);
+
+            // Valid numbers provided so render regardless - Better for debugging.
+            renderer.drawConnector(values[0], values[1], values[2], values[3], (char)(48+number));
+
+            // Check if the move is actually valid given the rules.
             if (board.isValid(values[0], values[1], values[2],values[3], number)){
                 return values;
             }
             return null;
         }
         catch (NumberFormatException e){
-            errorMessage = "One or more of the inputs was not an integer.";
+            String[] error = e.getMessage().split(" ");
+            errorMessage = "One or more of the inputs was invalid: " + error[error.length-1];
             return null;
         }
         catch (Exception e) {
             errorMessage = e.getMessage();
             return null;
         }
+    }
 
+    public void generalChecks(int[] values) throws Exception{
+        int x1 = values[0];
+        int y1 = values[1];
+        int x2 = values[2];
+        int y2 = values[3];
+        int number = values[4];
+        // NOTE: These checks are general checks for correctness - Additional checks in Board.isValid().
+        // Check for valid number.
+        if (!board.getColourIdentifiers().contains(number)){
+            throw new Exception("Invalid colour identifier provided.");
+        }
+
+        // Check in straight line or same input.
+        int vertical = Math.abs(y1 - y2);
+        int horizontal = Math.abs(x1 - x2);
+        if ((vertical == 0 && horizontal == 0)){
+            board.addErrorTiles(new Coordinate(y1,x1));
+            throw new Exception("Same tile or not straight line provided.");
+        }else if ((vertical > 0 && horizontal > 0)){
+            System.out.println(vertical + " :: " + horizontal);
+            for (int i = 0; i<= vertical; i++){
+                for (int j =0; j<= horizontal; j++){
+                    board.addErrorTiles(new Coordinate(y1+i, x1+j));
+                }
+            }
+            throw new Exception("Same tile or not straight line provided.");
+        }
     }
 }

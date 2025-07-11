@@ -1,5 +1,7 @@
 package com.codingame.game;
 
+import org.checkerframework.checker.units.qual.C;
+
 import java.util.*;
 
 public class Board {
@@ -13,16 +15,13 @@ public class Board {
     private final Set<Integer> colourIdentifiers = new HashSet<>();
     private final Map<Coordinate, Set<Coordinate>> connections = new HashMap<>();
     private final Map<Character,Set<Coordinate>> paths = new HashMap<>();
-    private int unconnected = 0;
+    private int total_connected = 0;
+
+    private final ArrayList<Coordinate> invalidTiles = new ArrayList<>();
 
     public Board(int h, int w) {
         this.h = h;
         this.w = w;
-        this.unconnected = h*w;
-    }
-
-    public int getUnconnected(){
-        return unconnected;
     }
 
     public void addConnections(int y1, int x1, int y2, int x2, char colourIdentifier){
@@ -45,14 +44,10 @@ public class Board {
                 coord2 = new Coordinate(y1, x1+i+1, grid.get(y1)[x1+i+1]);
             }
 
-            if (grid.get(coord1.getY())[coord1.getX()] == '.') {
-                unconnected -= 1;
-            }
-            if (grid.get(coord2.getY())[coord2.getX()] == '.') {
-                unconnected -= 1;
-            }
             grid.get(coord1.getY())[coord1.getX()] = colourIdentifier;
             grid.get(coord2.getY())[coord2.getX()] = colourIdentifier;
+
+            total_connected += 1;
 
             // Add connections between the tiles.
             connections.get(coord1).add(coord2);
@@ -81,10 +76,6 @@ public class Board {
         }
     }
 
-    public boolean isEmptyTiles(){
-        return unconnected != 0;
-    }
-
     public boolean checkWin(){
         int connected = 0;
         for (Coordinate coordinate : startColours){
@@ -102,6 +93,14 @@ public class Board {
         return w;
     }
 
+    public boolean isEnded(){
+        return total_connected == h*w-startColours.size();
+    }
+
+    public int getUnconnected(){
+        return h*w-total_connected;
+    }
+
     public ArrayList<char[]> getGrid() {
         return grid;
     }
@@ -110,40 +109,52 @@ public class Board {
         return startGrid;
     }
 
+    public Set<Integer> getColourIdentifiers(){
+        return colourIdentifiers;
+    }
+
+    public ArrayList<Coordinate> getErrorTiles(){
+        return invalidTiles;
+    }
+
+    public void addErrorTiles(Coordinate coord){
+        invalidTiles.add(coord);
+    }
+
     public boolean isValid(int y1, int x1, int y2, int x2, int colourIdentifierNumber){
+        ArrayList<Coordinate> coords = new ArrayList<>();
         try{
             char colourIdentifier = (char) (48+colourIdentifierNumber);
             if (!paths.containsKey(colourIdentifier)){
                 paths.put(colourIdentifier, new HashSet<>());
             }
 
-            // Check for valid coordinates.
-            if (y1 < 0 || y1 >= h || y2 < 0 || y2 >= h || x1 < 0 || x1 >= w || x2 < 0 || x2 >= w){
+            // Get coordinates in range provided and store.
+            int vertical = Math.abs(y1 - y2);
+            int horizontal = Math.abs(x1 - x2);
+
+            // Get coords involved in the connection.
+            Coordinate coord1;
+            Coordinate coord2;
+            for (int i = 0; i < (vertical + horizontal); i++) {
+                if (vertical > 0) {
+                    coords.add(new Coordinate(y1 + i, x1, grid.get(y1 + i)[x1]));
+                    coords.add( new Coordinate(y1 + i + 1, x1, grid.get(y1 + i + 1)[x1]));
+                } else {
+                    coords.add( new Coordinate(y1, x1 + i, grid.get(y1)[x1 + i]));
+                    coords.add( new Coordinate(y1, x1 + i + 1, grid.get(y1)[x1 + i + 1]));
+                }
+            }
+
+            // Check for bounds of provided coordinates.
+            if (y1 < 0 || y1 >= h || y2 < 0 || y2 >= h || x1 < 0 || x1 >=w || x2 < 0 || x2 >= w){
                 throw new Exception("One of the inputs is out of bounds.");
             }
 
-            // Check for valid number.
-            if (!colourIdentifiers.contains(colourIdentifierNumber)){
-                throw new Exception("Invalid colour identifier number.");
-            }
-
-            // Check in straight line or same input.
-            int vertical = Math.abs(y1 - y2);
-            int horizontal = Math.abs(x1 - x2);
-            if ((vertical == 0 && horizontal == 0) || (vertical > 0 && horizontal > 0)){
-                throw new Exception("Same input or not straight line.");
-            }
-
-            for (int i = 0; i < (vertical + horizontal); i++){
-                Coordinate coord1;
-                Coordinate coord2;
-                if (vertical > 0) {
-                    coord1 = new Coordinate(y1+i, x1, grid.get(y1+i)[x1]);
-                    coord2 = new Coordinate(y1+i+1, x1, grid.get(y1+i+1)[x1]);
-                }else{
-                    coord1 = new Coordinate(y1, x1+i, grid.get(y1)[x1+i]);
-                    coord2 = new Coordinate(y1, x1+i+1, grid.get(y1)[x1+i+1]);
-                }
+            // Check that pairs are valid.
+            for (int i = 0; i < coords.size(); i+=2){
+                coord1 = coords.get(i);
+                coord2 = coords.get(i+1);
 
                 if (!connections.containsKey(coord1)){connections.put(coord1, new HashSet<>());}
                 if (!connections.containsKey(coord2)){connections.put(coord2, new HashSet<>());}
@@ -160,7 +171,7 @@ public class Board {
                 }
 
                 // Ensure only one connection out of a start node.
-                if (allStartColours.contains(coord1) && connections.get(coord1).size() == 1 || allStartColours.contains(coord2) && connections.get(coord2).size() == 2){
+                if (allStartColours.contains(coord1) && connections.get(coord1).size() == 1 || allStartColours.contains(coord2) && connections.get(coord2).size() == 1){
                     throw new Exception("Can't connect more than two paths to a starting tile.");
                 }
 
@@ -178,6 +189,7 @@ public class Board {
             return true;
         }
         catch (Exception e) {
+            invalidTiles.addAll(coords);
             Referee.errorMessage = e.getMessage();
             return false;
         }
