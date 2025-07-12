@@ -11,7 +11,7 @@ public class SkeletonMain {
         //gameRunner.setAgent(Agent2.class);
 
         // Sets a test case
-        gameRunner.setTestCase("test17.json");
+        gameRunner.setTestCase("test24.json");
 
         // Starts the game.
         gameRunner.start();

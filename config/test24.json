@@ -2,7 +2,7 @@
   "title": {
     "2": "Larger Sparse 3"
   },
-  "testIn": "6 7\n6.....6\n.......\n.......\n7......\n4......\n4.....7",
+  "testIn": "6 7\n77....6\n.......\n.....5.\n.....5.\n.......\n4..4..6",
   "isTest": "false",
   "isValidator": "true"
 }
