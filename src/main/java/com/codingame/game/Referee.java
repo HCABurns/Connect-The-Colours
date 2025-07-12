@@ -94,8 +94,8 @@ public class Referee extends AbstractReferee {
                 if (errorMessage == null){
                     errorMessage = "Not all lines are connected in a continuous manner.";
                 }
-                gameManager.setFrameDuration(50*board.getUnconnected());
-                gameManager.setFrameDuration(2000);
+                System.err.println(board.getUnconnected());
+                gameManager.setFrameDuration(200 + 200*(board.getUnconnected()));
                 end(errorMessage);
             }
         }
@@ -124,6 +124,7 @@ public class Referee extends AbstractReferee {
             int x2 = Integer.parseInt(arr[2]);
             int y2 = Integer.parseInt(arr[3]);
             int number = Integer.parseInt(arr[4]);
+            // Set y1,x1 to be the left-most coordinate.
             if ((y1+x1) < (y2+x2)) {
                 values[0] = y1;values[1] = x1;values[2] = y2;values[3] = x2;
             }else{
@@ -132,7 +133,7 @@ public class Referee extends AbstractReferee {
             values[4] = number;
 
             // Complete general checks on the input. (Bounds and Valid colour)
-            generalChecks(values);
+            generalChecks(values[0], values[1], values[2],values[3], number);
 
             // Valid numbers provided so render regardless - Better for debugging.
             renderer.drawConnector(values[0], values[1], values[2], values[3], (char)(48+number));
@@ -154,12 +155,7 @@ public class Referee extends AbstractReferee {
         }
     }
 
-    public void generalChecks(int[] values) throws Exception{
-        int y1 = values[0];
-        int x1 = values[1];
-        int y2 = values[2];
-        int x2 = values[3];
-        int number = values[4];
+    public void generalChecks(int y1, int x1, int y2, int x2, int number) throws Exception{
         // NOTE: These checks are general checks for correctness - Additional checks in Board.isValid().
         // Check for valid number.
         if (!board.getColourIdentifiers().contains(number)){

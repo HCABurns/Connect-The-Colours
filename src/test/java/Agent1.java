@@ -14,7 +14,7 @@ public class Agent1 {
     static boolean foundSolution = false;
 
     public static void main(String[] args) {
-        InputStream inStream = ClassLoader.getSystemResourceAsStream("test21data.txt");
+        InputStream inStream = ClassLoader.getSystemResourceAsStream("test17data.txt");
         if (inStream == null){return;}
         long startTime = 0;
         Map<Character,Coordinate> start_nodes = new HashMap<>();
@@ -119,7 +119,7 @@ public class Agent1 {
         dfs(start, end, 1L << start, 1L << start, pathList);
     }
 
-    static void dfs(int index, int end, long path, long visited, List<Long> pathList) {
+    static boolean dfs(int index, int end, long path, long visited, List<Long> pathList) {
         int y = index / w, x = index % w;
         for (int[] dir : directions) {
             int ny = y + dir[0], nx = x + dir[1];
@@ -128,11 +128,17 @@ public class Agent1 {
                 if (((visited >> newIdx) & 1L) == 1L) continue;
                 if (newIdx == end) {
                     pathList.add(path | (1L << end));
+                    if (pathList.size() == 5000){
+                        //System.out.println("wad");
+                        return true;
+                    }
                 } else if (grid[newIdx] == '.') {
-                    dfs(newIdx, end, path | (1L << newIdx), visited | (1L << newIdx), pathList);
+                    boolean res = dfs(newIdx, end, path | (1L << newIdx), visited | (1L << newIdx), pathList);
+                    if (res){return true;}
                 }
             }
         }
+        return false;
     }
 
     static void findSolution(List<Character> keys, long currentMask, int depth, List<Integer> pathIndex) {

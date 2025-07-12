@@ -98,7 +98,7 @@ public class Board {
     }
 
     public int getUnconnected(){
-        return h*w-total_connected;
+        return invalidTiles.size();
     }
 
     public ArrayList<char[]> getGrid() {
