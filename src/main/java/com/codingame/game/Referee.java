@@ -24,7 +24,7 @@ public class Referee extends AbstractReferee {
 
         // Set frame duration.
         gameManager.setFrameDuration(600);
-        gameManager.setFirstTurnMaxTime(3000);
+        gameManager.setFirstTurnMaxTime(1500);
         gameManager.setMaxTurns(50);
         gameManager.setTurnMaxTime(50);
 
@@ -155,15 +155,20 @@ public class Referee extends AbstractReferee {
     }
 
     public void generalChecks(int[] values) throws Exception{
-        int x1 = values[0];
-        int y1 = values[1];
-        int x2 = values[2];
-        int y2 = values[3];
+        int y1 = values[0];
+        int x1 = values[1];
+        int y2 = values[2];
+        int x2 = values[3];
         int number = values[4];
         // NOTE: These checks are general checks for correctness - Additional checks in Board.isValid().
         // Check for valid number.
         if (!board.getColourIdentifiers().contains(number)){
             throw new Exception("Invalid colour identifier provided.");
+        }
+
+        // Check for bounds of provided coordinates.
+        if (y1 < 0 || y1 >= board.getHeight() || y2 < 0 || y2 >= board.getHeight() || x1 < 0 || x1 >= board.getWidth() || x2 < 0 || x2 >= board.getWidth()){
+            throw new Exception("One of the inputs is out of bounds.");
         }
 
         // Check in straight line or same input.
@@ -174,9 +179,9 @@ public class Referee extends AbstractReferee {
             throw new Exception("Same tile or not straight line provided.");
         }else if ((vertical > 0 && horizontal > 0)){
             System.out.println(vertical + " :: " + horizontal);
-            for (int i = 0; i<= vertical; i++){
-                for (int j =0; j<= horizontal; j++){
-                    board.addErrorTiles(new Coordinate(y1+i, x1+j));
+            for (int i = 0; i <= vertical; i++){
+                for (int j = 0; j <= horizontal; j++){
+                    board.addErrorTiles(new Coordinate((y1+i), (x1+j)));
                 }
             }
             throw new Exception("Same tile or not straight line provided.");

@@ -146,11 +146,6 @@ public class Board {
                 }
             }
 
-            // Check for bounds of provided coordinates.
-            if (y1 < 0 || y1 >= h || y2 < 0 || y2 >= h || x1 < 0 || x1 >=w || x2 < 0 || x2 >= w){
-                throw new Exception("One of the inputs is out of bounds.");
-            }
-
             // Check that pairs are valid.
             for (int i = 0; i < coords.size(); i+=2){
                 coord1 = coords.get(i);

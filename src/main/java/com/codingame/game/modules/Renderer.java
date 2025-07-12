@@ -41,7 +41,7 @@ public class Renderer implements Module {
 
     public void setErrorTiles(Board board){
         for (Coordinate coord : board.getErrorTiles()){
-            if (coord.getY() * board.getWidth() + coord.getX() < board.getWidth() * board.getHeight() - 1) {
+            if (coord.getY() * board.getWidth() + coord.getX() < board.getWidth() * board.getHeight()) {
                 addErrorTile(tiles.get(coord.getY() * board.getWidth() + coord.getX()).getId(), Constants.ERROR_TILE_MAPPER.get(board.getStartGrid().get(coord.getY())[coord.getX()]));
             }
         }

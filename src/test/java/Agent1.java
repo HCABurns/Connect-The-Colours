@@ -14,7 +14,7 @@ public class Agent1 {
     static boolean foundSolution = false;
 
     public static void main(String[] args) {
-        InputStream inStream = ClassLoader.getSystemResourceAsStream("test17data.txt");
+        InputStream inStream = ClassLoader.getSystemResourceAsStream("test21data.txt");
         if (inStream == null){return;}
         long startTime = 0;
         Map<Character,Coordinate> start_nodes = new HashMap<>();
@@ -80,12 +80,13 @@ public class Agent1 {
             while (path.size() > 1) {
                 int[] pos1 = path.pollFirst();
                 int[] pos2 = path.peekFirst();
-                System.out.println(pos1[1] + " " +pos1[0] + " " + pos2[1] + " " + pos2[0] + " " + c);
-            }
+                System.out.println(pos1[1] + " " + pos1[0] + " " + pos2[1] + " " + pos2[0] + " " + c);
 
+            }
         }
         long endTime = System.nanoTime();
         System.err.println("Duration:" + (endTime - startTime) / 1000000.0);
+
     }
 
     // Reconstructs a valid path from start to end within a bitmask path
