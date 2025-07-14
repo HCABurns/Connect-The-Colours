@@ -73,7 +73,7 @@
       <div class="title">Input</div>
       <div class="text">
         <p><span class="statement-lineno">Line 1: </span>Space separated integers <var>h</var> <var>w</var> representing the height and width of the puzzle.</p>
-        <p><span class="statement-lineno">Next <var>h</var> Lines: </span> String of length <var>w</var> representing a portion of the puzzle.</p>
+        <p><span class="statement-lineno">Next <var>h</var> Lines: </span> String of length <var>w</var> representing a row of the puzzle.</p>
         <p> <em>Integers are used to define colours. Matching integers represent the same colour.</em> </p>
         <p> <em>The full stop character (<const>.</const>) indicates an empty tile that can be used as part of a path.</em> </p>
       </div>
@@ -92,7 +92,7 @@
           <li> <var>colour</var> - Colour identifier.
         </ul>
         This will create a section of a path from the first tile, to the second tile and will be in the colour denoted by the colour identifier.<br>
-        Tiles <b>MUST</b> be in the same plane either horizontal or vertical (<var>x1</var> = <var>x2</var> <b>OR</b> <var>y1</var> = <var>y2</var>).
+        Tiles <b>MUST</b> be in the same plane either horizontally or vertically (<var>x1</var> = <var>x2</var> <b>OR</b> <var>y1</var> = <var>y2</var>).
       
         <br>
       </div>
@@ -105,29 +105,57 @@
       <span>Example</span>
     </h1>
     
-    <div class="statement-examples-text">
-      <span class="statement-lineno">Input:</span><br>
-      <tt>3 3<br>
-      1.2<br>
-      ...<br>
-      .12</tt><br><br>
-
-      <span class="statement-lineno">Outputs:</span><br>
-      <tt> 0 0 0 2 1<br>
-      0 2 1 2 1<br>
-      2 0 1 0 2 <br>
-      1 0 1 1 2 <br>
-      1 1 2 1 2 <br>
-      2 1 2 2 2 <br>
-      </tt>
-    </div>
+    <!-- Intiaial input Example -->
+    <div class="statement-inout">
+      <div class="statement-inout-in" style = "max-width:25%">
+        <div class="title" style="padding: 0; ">Initialization input</div>
+          <tt>
+            3 3 <em>(h,w)</em> <br>
+            1.2 <em>(row)</em> <br>
+            ... <em>(row)</em> <br>
+            .12 <em>(row)</em>
+          </tt>
+      </div>
+      
+    <div class="statement-inout-in" style="text-align: center; max-width:75%">Grid with 3 rows and 3 columns. Integers in the <em>rows</em> represent the two tiles of a specific colour that must be connected with a single continuous path.<br><br><img height = "150" src="https://i.imgur.com/JSni02Z.png"></div>
+    
   </div>
 
+  <!-- Output turn 1 Example -->
+  <div class="statement-inout">
+    <div class="statement-inout-out" style = "max-width:25%">
+      <div class="title" style="padding: 0;">Output for turn 1</div>
+          <tt>0 0 0 2 1</tt>
+    </div>
+    <div class="statement-inout-out" style="text-align: center; max-width:75%">Create a path from coordinates (<const>0</const>,<const>0</const>) to the coordinates (<const>0</const>,<const>2</const>) using the colour represented by the colour identifier <const>1</const>.<br><br><img height = "150" src="https://i.imgur.com/xt8AMUx.png"></div>
+  </div>
+
+  <!-- Output turn 2 Example -->
+  <div class="statement-inout" >
+    <div class="statement-inout-out" style = "max-width:25%">
+      <div class="title" style="padding: 0;">Output for turn 2</div>
+          <tt>2 0 1 0 2</tt>
+    </div>
+    <div class="statement-inout-in" style="text-align: center; max-width:75%">Create a path from coordinates (<const>2</const>,<const>0</const>) to the coordinates (<const>1</const>,<const>0</const>) using the colour represented by the colour identifier <const>2</const>.<br><br><img height = "150" src="https://i.imgur.com/1sUClql.png"></div>
+  </div>
+    
+    <!-- Output remaing turns Example -->
+  <div class="statement-inout" >
+    <div class="statement-inout-out" style = "max-width:25%">
+      <div class="title" style="padding: 0;">Outputs for remaining turns</div>
+        <tt>0 2 1 2 1<br>
+        1 0 1 1 2 <br>
+        1 1 2 1 2 <br>
+        2 1 2 2 2 <br></tt>
+    </div>
+    <div class="statement-inout-in" style="text-align: center; max-width:75%">Create paths for the remaining paired tiles, ensuring that each color is connected by a single continuous path and that every tile is used.<br><br><img height = "150" src="https://i.imgur.com/c7AhN37.png"></div>
+  </div>
+  
     <!-- Protocol block -->
     <div class="blk">
       <div class="title">Constraints</div>
         <div class="text"> 3 ≤ <var>h</var>, <var>w</var> ≤ 10<br>
-          Allotted response time for first output is <const>1.5</const> seconds.<br>
+          Allotted response time for first output is <const>2</const> seconds.<br>
           Allotted response time for turn outputs is <const>50</const> ms.<br>
           Turn limit is <const>50</const> turns.<br>
           A colour identifier will appear exactly twice within a puzzle.

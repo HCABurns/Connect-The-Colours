@@ -24,7 +24,7 @@ public class Referee extends AbstractReferee {
 
         // Set frame duration.
         gameManager.setFrameDuration(600);
-        gameManager.setFirstTurnMaxTime(1500);
+        gameManager.setFirstTurnMaxTime(2000);
         gameManager.setMaxTurns(50);
         gameManager.setTurnMaxTime(50);
 
