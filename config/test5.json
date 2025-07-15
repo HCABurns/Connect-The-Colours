@@ -3,6 +3,6 @@
     "2": "Around the World"
   },
   "testIn":"4 4\n....\n.12.\n.12.\n....",
-  "isTest": "True",
+  "isTest": "true",
   "isValidator": "false"
 }

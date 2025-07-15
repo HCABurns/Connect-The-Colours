@@ -1,8 +1,8 @@
 {
   "title": {
-    "2": "Larger Sparse 2 Validator"
+    "2": "Single Path"
   },
-  "testIn": "6 7\n6.....7\n6......\n.......\n.....11\n.......\n7......",
-  "isTest": "false",
-  "isValidator": "true"
+  "testIn": "1 2\n11",
+  "isTest": "true",
+  "isValidator": "false"
 }

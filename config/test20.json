@@ -1,8 +1,9 @@
 {
   "title": {
-    "2": "Single Colour"
+    "2": "Slightly Larger 4"
   },
-  "testIn": "5 5\n7...7\n.....\n.....\n.....\n.....\n.....",
+  "testIn": "6 7\n43..3.2\n..11...\n.......\n...77..\n.......\n48866.2",
   "isTest": "true",
   "isValidator": "false"
 }
+

@@ -1,8 +1,9 @@
 {
   "title": {
-    "2": "Single Colour Validator"
+    "2": "Slightly Larger 4"
   },
-  "testIn": "5 5\n.....\n.....\n.....\n.....\n7...7",
+  "testIn": "6 7\n2.55668\n.......\n....11.\n.44....\n.......\n2.....8",
   "isTest": "false",
   "isValidator": "true"
 }
+

@@ -1,8 +1,8 @@
 {
   "title": {
-    "2": "Larger Sparse 2"
+    "2": "Single Colour"
   },
-  "testIn": "6 7\n43..3.2\n..11...\n.......\n...77..\n.......\n4..66.2",
-  "isTest": "true",
-  "isValidator": "false"
+  "testIn": "5 5\n.....\n.....\n.....\n.....\n7...7",
+  "isTest": "false",
+  "isValidator": "true"
 }
