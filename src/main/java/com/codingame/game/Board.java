@@ -131,7 +131,7 @@ public class Board {
     /**
      * Check that the path between the two tiles if valid:
      *  # Not attempting to recolour a starting tile.
-     *  # Not trying to redraw a path that is already made. (Currently removed)
+     *  # Not trying to redraw a path that is already made.
      *  # Not trying to connect more than one tile to a starting tile.
      *  # Not trying to connect more than 2 paths to a tile. (3 means not continuous)
      *  # Not trying to connect two different colours together.
@@ -183,9 +183,9 @@ public class Board {
                 }
 
                 // Connection already made
-                //if (connections.containsKey(coord1) && connections.get(coord1).contains(coord2)){
-                 //   throw new Exception("All or part of the connection is already made.");
-               // }
+                if (connections.containsKey(coord1) && connections.get(coord1).contains(coord2)){
+                    throw new Exception("All or part of the connection is already made.");
+                }
 
                 // Ensure only one connection out of a start node.
                 if (allStartColours.contains(coord1) && connections.get(coord1).size() == 1 || allStartColours.contains(coord2) && connections.get(coord2).size() == 1){
