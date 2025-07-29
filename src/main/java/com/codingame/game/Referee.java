@@ -50,6 +50,7 @@ public class Referee extends AbstractReferee {
                 renderer.drawTile(row[j], i-1, j);
             }
         }
+
         // Scale the group to fit inside the frame - Also add to viewport for scrolling.
         renderer.scaleGroup(board.getWidth(), board.getHeight());
         renderer.getGroup().setZIndex(renderer.getZ_UI());

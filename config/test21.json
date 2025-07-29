@@ -1,9 +1,8 @@
 {
   "title": {
-    "2": "Slightly Larger 4"
+    "2": "Slightly Larger 2"
   },
-  "testIn": "6 7\n2.55668\n.......\n....11.\n.44....\n.......\n2.....8",
-  "isTest": "false",
-  "isValidator": "true"
+  "testIn": "6 6\n31...1\n.....6\n.54.62\n.4....\n...3..\n5....2",
+  "isTest": "true",
+  "isValidator": "false"
 }
-

@@ -1,8 +1,8 @@
 {
   "title": {
-    "2": "Medium 4"
+    "2": "Medium 3"
   },
-  "testIn": "5 5\n.25.5\n.1364\n.....\n...64\n21..3",
-  "isTest": "true",
+  "testIn": "5 5\n.23.3\n245..\n....5\n47...\n7..88",
+  "isTest": "false",
   "isValidator": "true"
 }

@@ -1,0 +1,8 @@
+{
+  "title": {
+    "2": "Larger Sparse"
+  },
+  "testIn": "7 6\n4....4\n3.....\n......\n.....6\n3....6\n......\n2....2",
+  "isTest": "true",
+  "isValidator": "false"
+}
