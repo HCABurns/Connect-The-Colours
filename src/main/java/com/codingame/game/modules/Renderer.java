@@ -12,13 +12,18 @@ import java.io.Serializable;
 import java.util.*;
 
 public class Renderer implements Module {
+    // Set selection of variables that are used throughout.
     private final SoloGameManager<Player> gameManager;
     private final List<Map<String, Serializable>> allTiles = new ArrayList<>();
     private final GraphicEntityModule graphicEntityModule;
     private final Group group;
-    private final ArrayList<Tile> tiles = new ArrayList<>();// Constants
+    private final ArrayList<Integer> tiles = new ArrayList<>();// Constants
 
-
+    /**
+     * Create a Renderer object for adding the visuals to the screen.
+     * @param gameManager - gameManager object.
+     * @param graphicEntityModule - graphicEntityModule object.
+     */
     @Inject
     public Renderer(SoloGameManager<Player> gameManager, GraphicEntityModule graphicEntityModule) {
         this.gameManager = gameManager;
@@ -29,7 +34,11 @@ public class Renderer implements Module {
         gameManager.registerModule(this);
     }
 
-
+    /**
+     * Function to update the texture of a tile to be the provided texture.
+     * @param id - ID of the sprite to be updated.
+     * @param texture String of the texture to be updated to.
+     */
     public void addErrorTile(int id, String texture) {
         for (Map<String, Serializable> map : allTiles){
             if (map.get("id") == (Serializable) id){
@@ -38,21 +47,34 @@ public class Renderer implements Module {
         }
     }
 
-
+    /**
+     * Sets the error tiles for the tiles that are set as involved in an error.
+     * @param board - Board object containing information for getting which tiles need to be updated.
+     */
     public void setErrorTiles(Board board){
         for (Coordinate coord : board.getErrorTiles()){
             if (coord.getY() * board.getWidth() + coord.getX() < board.getWidth() * board.getHeight()) {
-                addErrorTile(tiles.get(coord.getY() * board.getWidth() + coord.getX()).getId(), Constants.ERROR_TILE_MAPPER.get(board.getStartGrid().get(coord.getY())[coord.getX()]));
+                addErrorTile(tiles.get(coord.getY() * board.getWidth() + coord.getX()), Constants.ERROR_TILE_MAPPER.get(board.getStartGrid().get(coord.getY())[coord.getX()]));
             }
         }
     }
 
-    public void addCompletedTiles(Board board) {
+    /**
+     * Convert all tiles to their success counterpart.
+     */
+    public void addCompletedTiles() {
         for (Map<String, Serializable> map : allTiles){
             map.replace("texture", Constants.SUCCESS_TILE_MAPPER.get(map.get("identifier")));
         }
     }
 
+
+    /**
+     * Draw the tile and add to the group.
+     * @param number - The number identifier of the tile.
+     * @param i - Vertical position.
+     * @param j - Horizontal position.
+     */
     public void drawTile(char number, int i, int j){
         String tileName = Constants.TILE_SPRITE;
         if (Constants.START_TILE_MAPPER.containsKey(number)){
@@ -66,11 +88,19 @@ public class Renderer implements Module {
                 .setAnchor(0)
                 .setZIndex(z_TILES);
 
-        tiles.add(new Tile(tile.getId(), number, tile));
+        tiles.add(tile.getId());
         addTile(tile.getId(), tileName, number);
         group.add(tile);
     }
 
+    /**
+     * Adds a continuous connection between y1,x1 and y2,x2
+     * @param y1 - Y-Coordinate of tile 1.
+     * @param x1 - X-Coordinate of tile 1.
+     * @param y2 - Y-Coordinate of tile 2.
+     * @param x2 - X-Coordinate of tile2.
+     * @param number - Colour identifier number.
+     */
     public void drawConnector(int y1, int x1, int y2, int x2, char number){
         // Create the link between the moves.
         int horizontal_direction = 0;
@@ -86,7 +116,7 @@ public class Renderer implements Module {
             else{vertical_direction = -1;}
         }
         int connectors_to_build = Math.abs(y1 - y2) + Math.abs(x1 - x2);
-        Sprite sprite = null;
+        Sprite sprite;
         for (int i = 0; i <= connectors_to_build; i++) {
             int z_CONNECTORS = 10;
             if (vertical_direction != 0 && i != connectors_to_build) {
@@ -112,6 +142,12 @@ public class Renderer implements Module {
         }
     }
 
+    /**
+     * Add tile to the tiles list.
+     * @param id - Tile's sprite ID.
+     * @param texture - String of the texture of the tile.
+     * @param number - Tiles colour identifier.
+     */
     public void addTile(int id, String texture, char number){
         Map<String, Serializable> tile = new HashMap<>();
         tile.put("id", id);
@@ -120,6 +156,11 @@ public class Renderer implements Module {
         allTiles.add(tile);
     }
 
+    /**
+     * Scale the group to fit the screen.
+     * @param w - Width of the board.
+     * @param h - Height of the board.
+     */
     public void scaleGroup(int w, int h){
         // Calculate total grid size in pixels
         int gridWidth = w * Constants.CELL_SIZE;
@@ -147,6 +188,10 @@ public class Renderer implements Module {
         return this.group;
     }
 
+    /**
+     * Return the Z index of the group.
+     * @return Integer of the Z index of the group.
+     */
     public int getZ_UI() {
         return 20;
     }

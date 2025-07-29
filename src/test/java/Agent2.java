@@ -3,12 +3,37 @@ public class Agent2 {
     public static void main(String[] args) {
         //System.out.println("No no no no no");
 
-        System.out.println("0 0 2 0 1");
+        //System.out.println("3 3 6 1 7");
 
-        System.out.println("0 1 1 1 1");
-        System.out.println("1 0 2 0 1");
-        System.out.println("-1 -1 -3 -3 3");
-        System.out.println("1 0 1 3 2");
+        System.out.println("0 0 0 4 7");
+        System.out.println("0 4 4 4 7");
+        System.out.println("4 1 4 4 7");
+        System.out.println("3 1 4 1 7");
+        System.out.println("1 0 4 0 7");
+        System.out.println("1 2 2 2 7");
+        System.out.println("1 1 2 1 7");
+        System.out.println("1 3 3 3 7");
+        System.out.println("1 0 1 1 7");
+        System.out.println("1 2 1 3 7");
+        System.out.println("1 0 1 3 7");
+        System.out.println("2 1 2 2 7");
+        System.out.println("3 1 3 3 7");
+
+
+        /* Invalid
+        System.out.println("0 0 0 4 7");
+        System.out.println("0 4 4 4 7");
+        System.out.println("4 1 4 4 7");
+        System.out.println("3 1 4 1 7");
+        System.out.println("1 0 4 0 7");
+        System.out.println("1 2 2 2 7");
+        System.out.println("1 1 2 1 7");
+        System.out.println("1 3 3 3 7");
+        System.out.println("1 0 1 3 7");
+        //#print("2 0 2 3 7");
+        System.out.println("3 1 3 3 7");
+        */
+
 
         /*
         System.out.println("1 1 0 1 1");

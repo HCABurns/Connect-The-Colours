@@ -14,7 +14,7 @@ public class Agent1 {
     static boolean foundSolution = false;
 
     public static void main(String[] args) {
-        InputStream inStream = ClassLoader.getSystemResourceAsStream("test24data.txt");
+        InputStream inStream = ClassLoader.getSystemResourceAsStream("test25data.txt");
         if (inStream == null){return;}
         long startTime = 0;
         Map<Character,Coordinate> start_nodes = new HashMap<>();
@@ -106,7 +106,7 @@ public class Agent1 {
                     if (reconstructDFS(ny, nx, endY, endX, bitmask, visited, path, size - 1)) {
                         return true;
                     }
-                    path.pop(); // backtrack
+                    path.pop();
                 }
             }
         }
@@ -129,7 +129,6 @@ public class Agent1 {
                 if (newIdx == end) {
                     pathList.add(path | (1L << end));
                     if (pathList.size() == 5000){
-                        //System.out.println("wad");
                         return true;
                     }
                 } else if (grid[newIdx] == '.') {

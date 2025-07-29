@@ -6,7 +6,7 @@ export class Renderer {
   }
 
   handleFrameData(frameInfo, frameData) {
-    console.log("Frame", frameInfo.number, "data:", frameData);
+    //console.log("Frame", frameInfo.number, "data:", frameData);
 
     if (frameData){
     this.lastTiles = frameData.tiles || [];
@@ -30,7 +30,7 @@ export class Renderer {
         const tile = tiles[i];
         const entity = entityModule.entities.get(tile.id);
         if (entity) {
-          entity.graphics.texture = PIXI.Texture.from(tile.texture); // red texture
+          entity.graphics.texture = PIXI.Texture.from(tile.texture);
         }
     }
   }

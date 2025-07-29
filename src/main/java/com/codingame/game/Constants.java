@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class will store all the required constants.
+ */
 public class Constants {
     // Define view height and width.
     public static final int VIEWER_WIDTH = World.DEFAULT_WIDTH;

@@ -19,6 +19,9 @@ public class Referee extends AbstractReferee {
     private Board board;
     public static String errorMessage;
 
+    /**
+     * Function to set up the board and visuals.
+     */
     @Override
     public void init() {
 
@@ -59,9 +62,13 @@ public class Referee extends AbstractReferee {
         viewportModule.createViewport(renderer.getGroup());
     }
 
+    /**
+     * Game turn function - Receives the users inputs, processes them and carries out required functions depending on
+     * if the users inputs are valid or not. Additionally deals with ending the game.
+     * @param turn - Integer for the users current turn.
+     */
     @Override
     public void gameTurn(int turn) {
-
         gameManager.getPlayer().execute();
 
         try {
@@ -81,36 +88,50 @@ public class Referee extends AbstractReferee {
                 //renderer.drawConnector(y1, x1, y2, x2, number);
 
                 // Check if the grid is valid.
-                if (board.isEnded()){ //connections need to be h*w - start
+                if (board.isEnded()){
+                    // If all connections have been made, check that the board is valid.
                     boolean valid = board.checkWin();
                     if (valid) {
-                        renderer.addCompletedTiles(board);
+                        // Set visuals to completed and set the game result to win.
+                        renderer.addCompletedTiles();
                         gameManager.setFrameDuration(50*board.getHeight()* board.getWidth());
                         gameManager.winGame("Successfully connected all colours!");
                     }
                     else{
+                        // User has not won - Call the end function.
                         end("Not all lines are connected in a continuous manner.");}
                 }
             }else{
+                // User has not won - Call the end function.
                 if (errorMessage == null){
                     errorMessage = "Not all lines are connected in a continuous manner.";
                 }
-                System.err.println(board.getUnconnected());
                 gameManager.setFrameDuration(200 + 200*(board.getUnconnected()));
                 end(errorMessage);
             }
         }
         catch (TimeoutException e) {
+            // User didn't provide an output in the allotted time, call the function to end the game.
             end("Timeout...");
         }
     }
 
+
+    /**
+     * Function to end the game.
+     * @param m - ErrorMessage to display to the user.
+     */
     public void end(String m){
         renderer.setErrorTiles(board);
         gameManager.loseGame(m);
     }
 
 
+    /**
+     * Check the inputs given by the user are valid.
+     * @param outputs List of strings given by the user for this turn.
+     * @return - Custom Sorted int[] of the users inputs if valid OTHERWISE set errorMessage and return null;
+     */
     public int[] checkOutputs(List<String> outputs){
 
         if (outputs.size() != 1){gameManager.loseGame("You did not send a single input.");}
@@ -136,7 +157,7 @@ public class Referee extends AbstractReferee {
             // Complete general checks on the input. (Bounds and Valid colour)
             generalChecks(values[0], values[1], values[2],values[3], number);
 
-            // Valid numbers provided so render regardless - Better for debugging.
+            // Valid input provided so render regardless if the moves are valid or not - Better for debugging.
             renderer.drawConnector(values[0], values[1], values[2], values[3], (char)(48+number));
 
             // Check if the move is actually valid given the rules.
@@ -156,6 +177,18 @@ public class Referee extends AbstractReferee {
         }
     }
 
+    /**
+     * Perform general checks on the data to ensure that they are in the correct format:
+     *  # The colour identifier is valid for the given puzzle.
+     *  # Not out of bounds.
+     *  # Not the same tile and (x1==x2 or y1==y2)
+     * @param y1 - Y-Coordinate of tile 1.
+     * @param x1 - X-Coordinate of tile 1.
+     * @param y2 - Y-Coordinate of tile 2.
+     * @param x2 - X-Coordinate of tile2.
+     * @param number - Colour identifier number.
+     * @throws Exception - Throws exception if not in the correct format.
+     */
     public void generalChecks(int y1, int x1, int y2, int x2, int number) throws Exception{
         // NOTE: These checks are general checks for correctness - Additional checks in Board.isValid().
         // Check for valid number.
@@ -165,7 +198,7 @@ public class Referee extends AbstractReferee {
 
         // Check for bounds of provided coordinates.
         if (y1 < 0 || y1 >= board.getHeight() || y2 < 0 || y2 >= board.getHeight() || x1 < 0 || x1 >= board.getWidth() || x2 < 0 || x2 >= board.getWidth()){
-            throw new Exception("One of the inputs is out of bounds.");
+            throw new Exception("One or both of the inputs is out of bounds.");
         }
 
         // Check in straight line or same input.
@@ -175,12 +208,8 @@ public class Referee extends AbstractReferee {
             board.addErrorTiles(new Coordinate(y1,x1));
             throw new Exception("Same tile or not straight line provided.");
         }else if ((vertical > 0 && horizontal > 0)){
-            System.out.println(vertical + " :: " + horizontal);
-            for (int i = 0; i <= vertical; i++){
-                for (int j = 0; j <= horizontal; j++){
-                    board.addErrorTiles(new Coordinate((y1+i), (x1+j)));
-                }
-            }
+            board.addErrorTiles(new Coordinate(y1, x1));
+            board.addErrorTiles(new Coordinate(y2, x2));
             throw new Exception("Same tile or not straight line provided.");
         }
     }

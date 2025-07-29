@@ -2,10 +2,14 @@ package com.codingame.game;
 
 import java.util.Objects;
 
+/**
+ * Class for storing information about a coordinate.
+ */
 public class Coordinate {
 
-    private int y;
-    private int x;
+    private final int y;
+    private final int x;
+    // Colour identifier number.
     private char number;
 
     public Coordinate(int y,int x){
@@ -31,6 +35,11 @@ public class Coordinate {
         return number;
     }
 
+    /**
+     * Custom checker for comparing coordinates based on position ONLY.
+     * @param o - Coordinate to compare to.
+     * @return Boolean - True if the same position otherwise False.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
