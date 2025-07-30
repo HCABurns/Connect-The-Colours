@@ -5,6 +5,42 @@ export class Renderer {
     return 'Renderer';
   }
 
+  static defineToggle(option) {
+          Renderer.toggles[option.toggle] = false
+          option.get = () => Renderer.toggles[option.toggle]
+          Renderer.toggles[option.toggle] = false
+          option.set = (value) => {
+              Renderer.toggles[option.toggle] = value
+              Renderer.refreshContent()
+          }
+          return option
+      }
+
+  static refreshContent(){
+
+    if (Renderer.toggles.debugMode) {
+        const group = entityModule.entities.get(2)
+        const debug_group = entityModule.entities.get(3)
+
+        group.container.interactive = false;
+        group.container.visible = false;
+
+        debug_group.container.visible = true;
+
+    }
+    else{
+
+        const group = entityModule.entities.get(2)
+
+        group.container.interactive = true;
+        group.container.visible = true;
+
+        const debug_group = entityModule.entities.get(3)
+        debug_group.container.visible = false;
+    }
+  }
+
+
   handleFrameData(frameInfo, frameData) {
     //console.log("Frame", frameInfo.number, "data:", frameData);
 
@@ -34,6 +70,7 @@ export class Renderer {
         }
     }
   }
+  Renderer.refreshContent()
 }
 
   reinitScene(){}
@@ -48,3 +85,7 @@ export class Renderer {
     }
 
 }
+
+Renderer.toggles = {}
+Renderer.optionValues = {}
+Renderer.debugChildren = [];

@@ -6,6 +6,7 @@ import com.codingame.gameengine.core.SoloGameManager;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.codingame.gameengine.module.entities.Group;
 import com.codingame.gameengine.module.entities.Sprite;
+import com.codingame.gameengine.module.tooltip.TooltipModule;
 import com.google.inject.Inject;
 
 import java.io.Serializable;
@@ -18,21 +19,48 @@ public class Renderer implements Module {
     private final GraphicEntityModule graphicEntityModule;
     private final Group group;
     private final ArrayList<Integer> tiles = new ArrayList<>();// Constants
+    private final ArrayList<Sprite> debug_tiles = new ArrayList<>();// Constants
+    private final TooltipModule tooltipModule;
+    private int h;
+    private int w;
 
+    private final Group debug_group;
     /**
      * Create a Renderer object for adding the visuals to the screen.
      * @param gameManager - gameManager object.
      * @param graphicEntityModule - graphicEntityModule object.
      */
     @Inject
-    public Renderer(SoloGameManager<Player> gameManager, GraphicEntityModule graphicEntityModule) {
+    public Renderer(SoloGameManager<Player> gameManager, GraphicEntityModule graphicEntityModule, TooltipModule tooltipModule) {
         this.gameManager = gameManager;
         this.graphicEntityModule = graphicEntityModule;
+        this.tooltipModule = tooltipModule;
         int z_BACKGROUND = 0;
         graphicEntityModule.createSprite().setImage(Constants.BACKGROUND_SPRITE).setZIndex(z_BACKGROUND);
         group = graphicEntityModule.createGroup();
+        debug_group = graphicEntityModule.createGroup();
         gameManager.registerModule(this);
     }
+
+
+    /**
+     * This function will create a sprite with the given parameters.
+     * @param texture - String of the texture.
+     * @param x - X-Position to place the sprite.
+     * @param y - Y-Position to place the sprite.
+     * @param z - Z-index of the sprite.
+     * @param anchor - Double value of the anchor.
+     * @return Generated Sprite object.
+     */
+    public Sprite createSprite(String texture, int x, int y, int z, int anchor){
+        return graphicEntityModule.createSprite()
+                .setImage(texture)
+                .setX(x)
+                .setY(y)
+                .setAnchor(anchor)
+                .setZIndex(z);
+    }
+
 
     /**
      * Function to update the texture of a tile to be the provided texture.
@@ -47,6 +75,7 @@ public class Renderer implements Module {
         }
     }
 
+
     /**
      * Sets the error tiles for the tiles that are set as involved in an error.
      * @param board - Board object containing information for getting which tiles need to be updated.
@@ -58,6 +87,7 @@ public class Renderer implements Module {
             }
         }
     }
+
 
     /**
      * Convert all tiles to their success counterpart.
@@ -81,17 +111,25 @@ public class Renderer implements Module {
             tileName = Constants.START_TILE_MAPPER.get(number);
         }
         int z_TILES = 5;
-        Sprite tile = graphicEntityModule.createSprite()
-                .setImage(tileName)
-                .setX(j * Constants.CELL_SIZE)
-                .setY(i * Constants.CELL_SIZE)
-                .setAnchor(0)
-                .setZIndex(z_TILES);
+
+        Sprite tile = createSprite(tileName, j * Constants.CELL_SIZE, i * Constants.CELL_SIZE, z_TILES, 0);
+        Sprite debug_tile = createSprite(tileName, j * Constants.CELL_SIZE, i * Constants.CELL_SIZE, z_TILES, 0);
 
         tiles.add(tile.getId());
         addTile(tile.getId(), tileName, number);
         group.add(tile);
+
+        // Set debug tiles and tooltips.
+        debug_group.add(debug_tile);
+        debug_tiles.add(debug_tile);
+        if (number == '.') {
+            tooltipModule.setTooltipText(debug_tile, ("x: " + j + "\ny: " + i + "\ncolour: none"));
+        }
+        else{
+            tooltipModule.setTooltipText(debug_tile, ("x: " + j + "\ny: " + i + "\ncolour: " + number));
+        }
     }
+
 
     /**
      * Adds a continuous connection between y1,x1 and y2,x2
@@ -116,30 +154,53 @@ public class Renderer implements Module {
             else{vertical_direction = -1;}
         }
         int connectors_to_build = Math.abs(y1 - y2) + Math.abs(x1 - x2);
-        Sprite sprite;
+        Sprite sprite = null;
+        Sprite debug_sprite = null;
         for (int i = 0; i <= connectors_to_build; i++) {
             int z_CONNECTORS = 10;
             if (vertical_direction != 0 && i != connectors_to_build) {
-                sprite = graphicEntityModule.createSprite()
-                        .setImage(ySprite)
-                        .setX((x1) * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET)
-                        .setY((y1 + (i * vertical_direction)) * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET)
-                        .setAnchor(0)
-                        .setZIndex(z_CONNECTORS)
-                        .setScale(1);
+                int x = (x1) * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET;
+                int y = (y1 + (i * vertical_direction)) * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET;
+                sprite = createSprite(ySprite, x, y, z_CONNECTORS, 0);
+                debug_sprite = createSprite(ySprite, x, y, z_CONNECTORS, 0);
+
                 group.add(sprite);
+
+                // Update the debug tooltip.
+                debug_group.add(debug_sprite);
+                updateTooltip((y1+(i * vertical_direction))*this.w + x1, number);
             }
             else if (horizontal_direction != 0 && i != connectors_to_build) {
-                sprite = graphicEntityModule.createSprite()
-                        .setImage(xSprite)
-                        .setX((x1 + i * horizontal_direction) * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET)
-                        .setY(y1 * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET)
-                        .setAnchor(0)
-                        .setZIndex(z_CONNECTORS)
-                        .setScale(1);
+                int x = (x1 + i * horizontal_direction) * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET;
+                int y = y1 * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET;
+                sprite = createSprite(xSprite, x, y, z_CONNECTORS, 0);
+                debug_sprite = createSprite(xSprite, x, y, z_CONNECTORS, 0);
+
                 group.add(sprite);
+
+                // Update debug and tooltip.
+                debug_group.add(debug_sprite);
+                updateTooltip(y1*this.w + (x1 + i * horizontal_direction), number);
             }
+            graphicEntityModule.commitEntityState(0,sprite);
+            graphicEntityModule.commitEntityState(0,debug_sprite);
+            graphicEntityModule.commitEntityState(0,group);
+            graphicEntityModule.commitEntityState(0,debug_group);
         }
+        // Update final tile
+        updateTooltip(y2*this.w + x2, number);
+    }
+
+    /**
+     * Function to update the colour of a tile for debug mode.
+     * @param pos - Position in the 1D array.
+     * @param colour - Colour to be updated.
+     */
+    public void updateTooltip(int pos , char colour){
+        Sprite sprite = debug_tiles.get(pos);
+        String[] arr = tooltipModule.getTooltipText(sprite).split("\n");
+        arr[arr.length-1] = "colour: " + colour;
+        tooltipModule.setTooltipText(sprite, String.join("\n", arr));
     }
 
     /**
@@ -162,6 +223,8 @@ public class Renderer implements Module {
      * @param h - Height of the board.
      */
     public void scaleGroup(int w, int h){
+        this.h = h;
+        this.w = w;
         // Calculate total grid size in pixels
         int gridWidth = w * Constants.CELL_SIZE;
         int gridHeight = h * Constants.CELL_SIZE;
@@ -182,10 +245,18 @@ public class Renderer implements Module {
         group.setScale(scale);
         group.setX(centerX - scaledWidth / 2);
         group.setY(centerY - scaledHeight / 2);
+
+        debug_group.setScale(scale);
+        debug_group.setX(centerX - scaledWidth / 2);
+        debug_group.setY(centerY - scaledHeight / 2);
     }
 
     public Group getGroup(){
         return this.group;
+    }
+
+    public Group getDebugGroup(){
+        return this.debug_group;
     }
 
     /**

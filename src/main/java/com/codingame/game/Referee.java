@@ -2,6 +2,8 @@ package com.codingame.game;
 import java.util.*;
 
 import com.codingame.game.modules.Renderer;
+import com.codingame.gameengine.core.Tooltip;
+import com.codingame.gameengine.module.tooltip.TooltipModule;
 import com.codingame.gameengine.module.viewport.ViewportModule;
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
@@ -14,9 +16,11 @@ public class Referee extends AbstractReferee {
     @Inject private GraphicEntityModule graphicEntityModule;
     @Inject private ViewportModule viewportModule;
     @Inject private Renderer renderer;
+    @Inject private TooltipModule tooltips;
 
     // Define the required variables.
     private Board board;
+    private Board debug_board;
     public static String errorMessage;
 
     /**
@@ -38,6 +42,7 @@ public class Referee extends AbstractReferee {
 
         // Create board.
         board = new Board(grid_dimensions[0], grid_dimensions[1]);
+        debug_board = new Board(grid_dimensions[0], grid_dimensions[1]);
 
         // Send the player the inputs
         gameManager.getPlayer().sendInputLine(board.getHeight() +" "+ board.getWidth());
@@ -49,6 +54,7 @@ public class Referee extends AbstractReferee {
         for (int i = 1; i < board.getHeight()+1; i++) {
             char[] row = gameManager.getTestCaseInput().get(i).toCharArray();
             board.drawPuzzle(i - 1, row);
+            debug_board.drawPuzzle(i-1, row);
             for (int j = 0; j < row.length; j++){
                 renderer.drawTile(row[j], i-1, j);
             }
@@ -58,8 +64,16 @@ public class Referee extends AbstractReferee {
         renderer.scaleGroup(board.getWidth(), board.getHeight());
         renderer.getGroup().setZIndex(renderer.getZ_UI());
 
+        // Hide the debug group
+        System.out.println("Debug: " + renderer.getDebugGroup().getId());
+        renderer.getDebugGroup().setVisible(false);
+
+        System.out.println(renderer.getGroup().getId());
+
         // Add the group to the viewport.
         viewportModule.createViewport(renderer.getGroup());
+
+        //tooltips.setTooltipText(renderer.getGroup(), "tooltip on the group with viewport enabled");
     }
 
     /**

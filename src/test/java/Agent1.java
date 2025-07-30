@@ -14,7 +14,7 @@ public class Agent1 {
     static boolean foundSolution = false;
 
     public static void main(String[] args) {
-        InputStream inStream = ClassLoader.getSystemResourceAsStream("test25data.txt");
+        InputStream inStream = ClassLoader.getSystemResourceAsStream("test17data.txt");
         if (inStream == null){return;}
         long startTime = 0;
         Map<Character,Coordinate> start_nodes = new HashMap<>();
