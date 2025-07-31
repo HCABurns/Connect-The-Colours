@@ -18,8 +18,8 @@ public class Renderer implements Module {
     private final List<Map<String, Serializable>> allTiles = new ArrayList<>();
     private final GraphicEntityModule graphicEntityModule;
     private final Group group;
-    private final ArrayList<Integer> tiles = new ArrayList<>();// Constants
-    private final ArrayList<Sprite> debug_tiles = new ArrayList<>();// Constants
+    private final ArrayList<Integer> tiles = new ArrayList<>();
+    private final ArrayList<Sprite> debug_tiles = new ArrayList<>();
     private final TooltipModule tooltipModule;
     private int h;
     private int w;
@@ -68,6 +68,7 @@ public class Renderer implements Module {
      * @param texture String of the texture to be updated to.
      */
     public void addErrorTile(int id, String texture) {
+        //todo: Include the red / green of the debug map also.
         for (Map<String, Serializable> map : allTiles){
             if (map.get("id") == (Serializable) id){
                 map.replace("texture", texture);
@@ -84,6 +85,9 @@ public class Renderer implements Module {
         for (Coordinate coord : board.getErrorTiles()){
             if (coord.getY() * board.getWidth() + coord.getX() < board.getWidth() * board.getHeight()) {
                 addErrorTile(tiles.get(coord.getY() * board.getWidth() + coord.getX()), Constants.ERROR_TILE_MAPPER.get(board.getStartGrid().get(coord.getY())[coord.getX()]));
+
+                addErrorTile(debug_tiles.get(coord.getY() * board.getWidth() + coord.getX()).getId(), Constants.ERROR_TILE_MAPPER.get(board.getStartGrid().get(coord.getY())[coord.getX()]));
+
             }
         }
     }
@@ -116,12 +120,13 @@ public class Renderer implements Module {
         Sprite debug_tile = createSprite(tileName, j * Constants.CELL_SIZE, i * Constants.CELL_SIZE, z_TILES, 0);
 
         tiles.add(tile.getId());
-        addTile(tile.getId(), tileName, number);
+        addTile(tile.getId(), tileName, number, allTiles);
         group.add(tile);
 
         // Set debug tiles and tooltips.
         debug_group.add(debug_tile);
         debug_tiles.add(debug_tile);
+        addTile(debug_tile.getId(), tileName, number, allTiles);
         if (number == '.') {
             tooltipModule.setTooltipText(debug_tile, ("x: " + j + "\ny: " + i + "\nconnections: 0" + "\ncolour: none"));
         }
@@ -238,12 +243,12 @@ public class Renderer implements Module {
      * @param texture - String of the texture of the tile.
      * @param number - Tiles colour identifier.
      */
-    public void addTile(int id, String texture, char number){
+    public void addTile(int id, String texture, char number, List<Map<String, Serializable>> list){
         Map<String, Serializable> tile = new HashMap<>();
         tile.put("id", id);
         tile.put("texture", texture);
         tile.put("identifier", number);
-        allTiles.add(tile);
+        list.add(tile);
     }
 
 
