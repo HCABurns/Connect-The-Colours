@@ -5,6 +5,11 @@ public class Agent2 {
 
         //System.out.println("3 3 6 1 7");
 
+
+        System.out.println("0 0 1 0 7");
+        System.out.println("1 0 1 1 9");
+
+
         System.out.println("0 0 0 4 7");
         System.out.println("0 4 4 4 7");
         System.out.println("4 1 4 4 7");

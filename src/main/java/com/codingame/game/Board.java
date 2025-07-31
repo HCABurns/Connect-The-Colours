@@ -1,7 +1,5 @@
 package com.codingame.game;
 
-import org.checkerframework.checker.units.qual.C;
-
 import java.util.*;
 
 /**
@@ -256,5 +254,9 @@ public class Board {
 
     public ArrayList<Coordinate> getErrorTiles(){
         return invalidTiles;
+    }
+
+    public Map<Coordinate, Set<Coordinate>> getConnections(){
+        return connections;
     }
 }

@@ -123,10 +123,10 @@ public class Renderer implements Module {
         debug_group.add(debug_tile);
         debug_tiles.add(debug_tile);
         if (number == '.') {
-            tooltipModule.setTooltipText(debug_tile, ("x: " + j + "\ny: " + i + "\ncolour: none"));
+            tooltipModule.setTooltipText(debug_tile, ("x: " + j + "\ny: " + i + "\nconnections: 0" + "\ncolour: none"));
         }
         else{
-            tooltipModule.setTooltipText(debug_tile, ("x: " + j + "\ny: " + i + "\ncolour: " + number));
+            tooltipModule.setTooltipText(debug_tile, ("STARTING TILE\n"+"x: " + j + "\ny: " + i + "\nconnections: 0" + "\ncolour: " + number));
         }
     }
 
@@ -139,7 +139,7 @@ public class Renderer implements Module {
      * @param x2 - X-Coordinate of tile2.
      * @param number - Colour identifier number.
      */
-    public void drawConnector(int y1, int x1, int y2, int x2, char number){
+    public void drawConnector(int y1, int x1, int y2, int x2, char number, Map<Coordinate, Set<Coordinate>> connections){
         // Create the link between the moves.
         int horizontal_direction = 0;
         int vertical_direction = 0;
@@ -168,7 +168,12 @@ public class Renderer implements Module {
 
                 // Update the debug tooltip.
                 debug_group.add(debug_sprite);
-                updateTooltip((y1+(i * vertical_direction))*this.w + x1, number);
+
+                //todo: Don't update tooltip if this connection already made (stop connection be more than there already is)
+                if (!connections.containsKey(new Coordinate(y1+(i * vertical_direction), x1)) || !connections.get(new Coordinate(y1+(i * vertical_direction), x1)).contains(new Coordinate(y1+((i+1) * vertical_direction), x1))) {
+                    updateTooltip((y1 + (i * vertical_direction)) * this.w + x1, number);
+                    updateTooltip((y1 + ((i + 1) * vertical_direction)) * this.w + x1, number);
+                }
             }
             else if (horizontal_direction != 0 && i != connectors_to_build) {
                 int x = (x1 + i * horizontal_direction) * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET;
@@ -180,7 +185,12 @@ public class Renderer implements Module {
 
                 // Update debug and tooltip.
                 debug_group.add(debug_sprite);
-                updateTooltip(y1*this.w + (x1 + i * horizontal_direction), number);
+
+                //todo: Don't update tooltip if this connection already made (stop connection be more than there already is)
+                if (!connections.containsKey(new Coordinate(y1,(x1 + (i) * horizontal_direction))) || !connections.get(new Coordinate(y1,(x1 + (i) * horizontal_direction))).contains(new Coordinate(y1, (x1 + (1+i) * horizontal_direction)))) {
+                    updateTooltip(y1 * this.w + (x1 + i * horizontal_direction), number);
+                    updateTooltip(y1 * this.w + (x1 + (1 + i) * horizontal_direction), number);
+                }
             }
             graphicEntityModule.commitEntityState(0,sprite);
             graphicEntityModule.commitEntityState(0,debug_sprite);
@@ -188,8 +198,9 @@ public class Renderer implements Module {
             graphicEntityModule.commitEntityState(0,debug_group);
         }
         // Update final tile
-        updateTooltip(y2*this.w + x2, number);
+        //updateTooltip(y2*this.w + x2, number);
     }
+
 
     /**
      * Function to update the colour of a tile for debug mode.
@@ -199,9 +210,27 @@ public class Renderer implements Module {
     public void updateTooltip(int pos , char colour){
         Sprite sprite = debug_tiles.get(pos);
         String[] arr = tooltipModule.getTooltipText(sprite).split("\n");
-        arr[arr.length-1] = "colour: " + colour;
+
+        //todo: Add some error message if the colour is attempted to be changed.
+        String[] colours = arr[arr.length-1].split(" ");
+        int connections_position = 2;
+        if (!Objects.equals(colours[1], "none") && !Objects.equals(colours[1], String.valueOf(colour))){
+            if (!Objects.equals(arr[arr.length-1].split(" ")[0], "attempted")) {
+                String[] newArr = Arrays.copyOf(arr, arr.length + 1);
+                newArr[arr.length] = "attempted colour: " + colour;
+                arr = newArr;
+            }
+            connections_position += 1;
+        }
+        else if (Objects.equals(colours[1], "none")){
+            arr[arr.length-1] = "colour: " + colour;
+        }
+
+        int connections = Integer.parseInt(String.valueOf(arr[arr.length-connections_position].split(" ")[1]));
+        arr[arr.length-connections_position] = "connections: " + (connections+1);
         tooltipModule.setTooltipText(sprite, String.join("\n", arr));
     }
+
 
     /**
      * Add tile to the tiles list.
@@ -216,6 +245,7 @@ public class Renderer implements Module {
         tile.put("identifier", number);
         allTiles.add(tile);
     }
+
 
     /**
      * Scale the group to fit the screen.

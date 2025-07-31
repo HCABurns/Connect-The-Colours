@@ -172,7 +172,7 @@ public class Referee extends AbstractReferee {
             generalChecks(values[0], values[1], values[2],values[3], number);
 
             // Valid input provided so render regardless if the moves are valid or not - Better for debugging.
-            renderer.drawConnector(values[0], values[1], values[2], values[3], (char)(48+number));
+            renderer.drawConnector(values[0], values[1], values[2], values[3], (char)(48+number), board.getConnections());
 
             // Check if the move is actually valid given the rules.
             if (board.isValid(values[0], values[1], values[2],values[3], number)){
