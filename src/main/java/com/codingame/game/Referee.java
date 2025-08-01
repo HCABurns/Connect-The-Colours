@@ -65,10 +65,7 @@ public class Referee extends AbstractReferee {
         renderer.getGroup().setZIndex(renderer.getZ_UI());
 
         // Hide the debug group
-        System.out.println("Debug: " + renderer.getDebugGroup().getId());
         renderer.getDebugGroup().setVisible(false);
-
-        System.out.println(renderer.getGroup().getId());
 
         // Add the group to the viewport.
         viewportModule.createViewport(renderer.getGroup());

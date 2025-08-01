@@ -37,7 +37,6 @@ public class Constants {
         map.put('7', "tile7Error.png");
         map.put('8', "tile8Error.png");
         map.put('9', "tile9Error.png");
-        //map.put('c', "tileComplete.png");
         ERROR_TILE_MAPPER = Collections.unmodifiableMap(map);
     }
 

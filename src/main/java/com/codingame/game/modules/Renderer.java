@@ -175,10 +175,10 @@ public class Renderer implements Module {
                 debug_group.add(debug_sprite);
 
                 //todo: Don't update tooltip if this connection already made (stop connection be more than there already is)
-                if (!connections.containsKey(new Coordinate(y1+(i * vertical_direction), x1)) || !connections.get(new Coordinate(y1+(i * vertical_direction), x1)).contains(new Coordinate(y1+((i+1) * vertical_direction), x1))) {
-                    updateTooltip((y1 + (i * vertical_direction)) * this.w + x1, number);
-                    updateTooltip((y1 + ((i + 1) * vertical_direction)) * this.w + x1, number);
-                }
+                //if (!connections.containsKey(new Coordinate(y1+(i * vertical_direction), x1)) || !connections.get(new Coordinate(y1+(i * vertical_direction), x1)).contains(new Coordinate(y1+((i+1) * vertical_direction), x1))) {
+                updateTooltip((y1 + (i * vertical_direction)) * this.w + x1, number);
+                updateTooltip((y1 + ((i + 1) * vertical_direction)) * this.w + x1, number);
+                //}
             }
             else if (horizontal_direction != 0 && i != connectors_to_build) {
                 int x = (x1 + i * horizontal_direction) * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET;
@@ -192,10 +192,10 @@ public class Renderer implements Module {
                 debug_group.add(debug_sprite);
 
                 //todo: Don't update tooltip if this connection already made (stop connection be more than there already is)
-                if (!connections.containsKey(new Coordinate(y1,(x1 + (i) * horizontal_direction))) || !connections.get(new Coordinate(y1,(x1 + (i) * horizontal_direction))).contains(new Coordinate(y1, (x1 + (1+i) * horizontal_direction)))) {
-                    updateTooltip(y1 * this.w + (x1 + i * horizontal_direction), number);
-                    updateTooltip(y1 * this.w + (x1 + (1 + i) * horizontal_direction), number);
-                }
+                //if (!connections.containsKey(new Coordinate(y1,(x1 + (i) * horizontal_direction))) || !connections.get(new Coordinate(y1,(x1 + (i) * horizontal_direction))).contains(new Coordinate(y1, (x1 + (1+i) * horizontal_direction)))) {
+                updateTooltip(y1 * this.w + (x1 + i * horizontal_direction), number);
+                updateTooltip(y1 * this.w + (x1 + (1 + i) * horizontal_direction), number);
+                //}
             }
             graphicEntityModule.commitEntityState(0,sprite);
             graphicEntityModule.commitEntityState(0,debug_sprite);
@@ -216,9 +216,17 @@ public class Renderer implements Module {
         Sprite sprite = debug_tiles.get(pos);
         String[] arr = tooltipModule.getTooltipText(sprite).split("\n");
 
-        //todo: Add some error message if the colour is attempted to be changed.
+        System.out.println(Arrays.toString(arr));
+
+        // If tile is involved in an error, don't update it as already done.
+        //if (Objects.equals(arr[arr.length-1].split(" ")[0], "attempted")){
+        //    System.out.println("Run here.......");
+        //    return;
+        //}
+
         String[] colours = arr[arr.length-1].split(" ");
         int connections_position = 2;
+        // Add a new tooltip with the attempted colour change.
         if (!Objects.equals(colours[1], "none") && !Objects.equals(colours[1], String.valueOf(colour))){
             if (!Objects.equals(arr[arr.length-1].split(" ")[0], "attempted")) {
                 String[] newArr = Arrays.copyOf(arr, arr.length + 1);
@@ -227,13 +235,18 @@ public class Renderer implements Module {
             }
             connections_position += 1;
         }
+        // Update the colour
         else if (Objects.equals(colours[1], "none")){
             arr[arr.length-1] = "colour: " + colour;
         }
 
+
+        // Increment connections
         int connections = Integer.parseInt(String.valueOf(arr[arr.length-connections_position].split(" ")[1]));
         arr[arr.length-connections_position] = "connections: " + (connections+1);
         tooltipModule.setTooltipText(sprite, String.join("\n", arr));
+
+        System.out.println("After: " + Arrays.toString(arr));
     }
 
 
