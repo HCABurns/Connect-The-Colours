@@ -70,7 +70,6 @@ public class Referee extends AbstractReferee {
         // Add the group to the viewport.
         viewportModule.createViewport(renderer.getGroup());
 
-        //tooltips.setTooltipText(renderer.getGroup(), "tooltip on the group with viewport enabled");
     }
 
     /**

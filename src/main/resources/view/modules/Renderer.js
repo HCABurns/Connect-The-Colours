@@ -42,7 +42,6 @@ export class Renderer {
 
 
   handleFrameData(frameInfo, frameData) {
-    //console.log("Frame", frameInfo.number, "data:", frameData);
 
     if (frameData){
     this.lastTiles = frameData.tiles || [];

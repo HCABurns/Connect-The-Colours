@@ -68,7 +68,6 @@ public class Renderer implements Module {
      * @param texture String of the texture to be updated to.
      */
     public void addErrorTile(int id, String texture) {
-        //todo: Include the red / green of the debug map also.
         for (Map<String, Serializable> map : allTiles){
             if (map.get("id") == (Serializable) id){
                 map.replace("texture", texture);
@@ -174,8 +173,6 @@ public class Renderer implements Module {
                 // Update the debug tooltip.
                 debug_group.add(debug_sprite);
 
-                //todo: Don't update tooltip if this connection already made (stop connection be more than there already is)
-                //if (!connections.containsKey(new Coordinate(y1+(i * vertical_direction), x1)) || !connections.get(new Coordinate(y1+(i * vertical_direction), x1)).contains(new Coordinate(y1+((i+1) * vertical_direction), x1))) {
                 updateTooltip((y1 + (i * vertical_direction)) * this.w + x1, number);
                 updateTooltip((y1 + ((i + 1) * vertical_direction)) * this.w + x1, number);
                 //}
@@ -191,8 +188,6 @@ public class Renderer implements Module {
                 // Update debug and tooltip.
                 debug_group.add(debug_sprite);
 
-                //todo: Don't update tooltip if this connection already made (stop connection be more than there already is)
-                //if (!connections.containsKey(new Coordinate(y1,(x1 + (i) * horizontal_direction))) || !connections.get(new Coordinate(y1,(x1 + (i) * horizontal_direction))).contains(new Coordinate(y1, (x1 + (1+i) * horizontal_direction)))) {
                 updateTooltip(y1 * this.w + (x1 + i * horizontal_direction), number);
                 updateTooltip(y1 * this.w + (x1 + (1 + i) * horizontal_direction), number);
                 //}
@@ -216,14 +211,6 @@ public class Renderer implements Module {
         Sprite sprite = debug_tiles.get(pos);
         String[] arr = tooltipModule.getTooltipText(sprite).split("\n");
 
-        System.out.println(Arrays.toString(arr));
-
-        // If tile is involved in an error, don't update it as already done.
-        //if (Objects.equals(arr[arr.length-1].split(" ")[0], "attempted")){
-        //    System.out.println("Run here.......");
-        //    return;
-        //}
-
         String[] colours = arr[arr.length-1].split(" ");
         int connections_position = 2;
         // Add a new tooltip with the attempted colour change.
@@ -240,13 +227,11 @@ public class Renderer implements Module {
             arr[arr.length-1] = "colour: " + colour;
         }
 
-
         // Increment connections
         int connections = Integer.parseInt(String.valueOf(arr[arr.length-connections_position].split(" ")[1]));
         arr[arr.length-connections_position] = "connections: " + (connections+1);
         tooltipModule.setTooltipText(sprite, String.join("\n", arr));
 
-        System.out.println("After: " + Arrays.toString(arr));
     }
 
 

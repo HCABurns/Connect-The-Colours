@@ -97,7 +97,6 @@ public class Board {
     public boolean checkWin(){
         int connected = 0;
 
-        // todo: Probably can remove
         // Check that the connections are not more than 2
         boolean single_connectors = false;
         for (Coordinate coord : connections.keySet()){
