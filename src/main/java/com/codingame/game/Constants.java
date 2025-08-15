@@ -86,7 +86,6 @@ public class Constants {
         map.put('7', "connect_horizontal7.png");
         map.put('8', "connect_horizontal8.png");
         map.put('9', "connect_horizontal9.png");
-
         HORIZONTAL_CONNECTOR_MAPPER = Collections.unmodifiableMap(map);
     }
 

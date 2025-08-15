@@ -32,7 +32,7 @@ public class Referee extends AbstractReferee {
         // Set frame duration.
         gameManager.setFrameDuration(600);
         gameManager.setFirstTurnMaxTime(2000);
-        gameManager.setMaxTurns(50);
+        gameManager.setMaxTurns(65);
         gameManager.setTurnMaxTime(50);
 
         // Get inputs from the case and send to user.

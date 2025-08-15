@@ -1,8 +1,8 @@
 {
   "title": {
-    "2": "Single Path"
+    "2": "Single Colour"
   },
-  "testIn": "2 1\n9\n9",
+  "testIn": "5 5\n.....\n.....\n.....\n.....\n7...7",
   "isTest": "false",
   "isValidator": "true"
 }

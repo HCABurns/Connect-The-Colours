@@ -1,8 +1,8 @@
 {
   "title": {
-    "2": "Medium"
+    "2": "All Colours Test"
   },
-  "testIn": "5 5\n...3.\n.4.1.\n..2..\n.4.32\n.1...",
+  "testIn":"3 9\n123456789\n.........\n123456789",
   "isTest": "true",
-  "isValidator": "false"
+  "isValidator": "true"
 }
