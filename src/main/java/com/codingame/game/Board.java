@@ -38,9 +38,7 @@ public class Board {
      * @param colourIdentifier - Char of the colour identifier.
      */
     public void addConnections(int y1, int x1, int y2, int x2, char colourIdentifier){
-        // Create the link between the moves.
         int vertical_direction = 0;
-
         if (y1 != y2){
             if (y1 < y2){vertical_direction = 1;}
             else{vertical_direction = -1;}
@@ -57,6 +55,7 @@ public class Board {
                 coord2 = new Coordinate(y1, x1+i+1, grid.get(y1)[x1+i+1]);
             }
 
+            // Set tile to be colour.
             grid.get(coord1.getY())[coord1.getX()] = colourIdentifier;
             grid.get(coord2.getY())[coord2.getX()] = colourIdentifier;
 
