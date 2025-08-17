@@ -2,7 +2,6 @@ package com.codingame.game;
 import java.util.*;
 
 import com.codingame.game.modules.Renderer;
-import com.codingame.gameengine.core.Tooltip;
 import com.codingame.gameengine.module.tooltip.TooltipModule;
 import com.codingame.gameengine.module.viewport.ViewportModule;
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;

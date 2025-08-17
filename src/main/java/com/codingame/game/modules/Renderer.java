@@ -172,10 +172,8 @@ public class Renderer implements Module {
 
                 // Update the debug tooltip.
                 debug_group.add(debug_sprite);
-
                 updateTooltip((y1 + (i * vertical_direction)) * this.w + x1, number);
                 updateTooltip((y1 + ((i + 1) * vertical_direction)) * this.w + x1, number);
-                //}
             }
             else if (horizontal_direction != 0 && i != connectors_to_build) {
                 int x = (x1 + i * horizontal_direction) * (Constants.CELL_SIZE) + Constants.CONNECTOR_OFFSET;
@@ -190,15 +188,13 @@ public class Renderer implements Module {
 
                 updateTooltip(y1 * this.w + (x1 + i * horizontal_direction), number);
                 updateTooltip(y1 * this.w + (x1 + (1 + i) * horizontal_direction), number);
-                //}
             }
+            // Commit the connector at the START of the frame.
             graphicEntityModule.commitEntityState(0,sprite);
             graphicEntityModule.commitEntityState(0,debug_sprite);
             graphicEntityModule.commitEntityState(0,group);
             graphicEntityModule.commitEntityState(0,debug_group);
         }
-        // Update final tile
-        //updateTooltip(y2*this.w + x2, number);
     }
 
 
@@ -275,6 +271,7 @@ public class Renderer implements Module {
         int centerX = Constants.VIEWER_WIDTH / 2;
         int centerY = Constants.VIEWER_HEIGHT / 2;
 
+        // Scale and position both groups.
         group.setScale(scale);
         group.setX(centerX - scaledWidth / 2);
         group.setY(centerY - scaledHeight / 2);
