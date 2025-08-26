@@ -9,6 +9,9 @@
     <div class="statement-goal-content">
       Connect the Colours is a logical puzzle that involves connecting pairs of matching colours in a closed grid.
       The objective is to connect <b>ALL</b> pairs of identical colours with non-overlapping paths, using <b>EVERY</b> tile.
+      <br>
+      <br>
+      This is the second edition of the "Connect the Colours" series. This edition does <b>NOT</b> contain any of the <em>special</em> tiles that are in <a href="https://www.codingame.com/contribute/view/1299698fc897623022a45311186f34a333fc69">part 1</a>.
     </div>
   </div>
   <!-- RULES -->
@@ -20,7 +23,7 @@
     <div>
       <div class="statement-rules-content">
         <ul>
-          <li>Paths must consist of one or more horizontal and or vertical segments to connect adjacent tiles.</li>
+          <li>Paths must consist of one or more horizontal and/or vertical segments to connect adjacent tiles.</li>
           <li>Each colour must be connected to the other instance of the same colour using a continuous path.</li>
           <li>A single tile can only be used in <b>ONE</b> path and any two paths <b>CANNOT</b> overlap or cross each other.</li>
           <li>Paths must remain entirely within the grid boundaries.</li>
@@ -156,18 +159,18 @@
         1 1 2 1 2 <br>
         2 1 2 2 2 <br></tt>
     </div>
-    <div class="statement-inout-in" style="text-align: center; max-width:75%">Create paths for the remaining paired tiles, ensuring that each color is connected by a single continuous path and that every tile is used.<br><br><img height = "150" src="https://i.imgur.com/c7AhN37.png" alt = "example image 4"></div>
+    <div class="statement-inout-in" style="text-align: center; max-width:75%">Create paths for the remaining paired tiles, ensuring that each colour is connected by a single continuous path and that every tile is used.<br><br><img height = "150" src="https://i.imgur.com/c7AhN37.png" alt = "example image 4"></div>
   </div>
   
     <!-- Protocol block -->
     <div class="blk">
       <div class="title">Constraints</div>
         <div class="text"> 1 ≤ <var>h</var>, <var>w</var> ≤ 20<br>
+          A colour identifier will appear exactly twice within a puzzle.<br>
+          Maximum number of distinct colours in a puzzle is <const>9</const>.<br>
           Allotted response time for first output is <const>2</const> seconds.<br>
           Allotted response time for subsequent outputs is <const>50</const> ms.<br>
-          Turn limit is <const>60</const> turns.<br>
-          A colour identifier will appear exactly twice within a puzzle.<br>
-          Maximum number of distinct colours in a puzzle is <const>9</const>.
+          Turn limit is <const>60</const> turns.
         </div>
     </div>
   </div>
