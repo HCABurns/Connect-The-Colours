@@ -69,7 +69,7 @@ public class Renderer implements Module {
      */
     public void addErrorTile(int id, String texture) {
         for (Map<String, Serializable> map : allTiles){
-            if (map.get("id") == (Serializable) id){
+            if (map.get("id").equals(id)){
                 map.replace("texture", texture);
             }
         }
@@ -84,9 +84,7 @@ public class Renderer implements Module {
         for (Coordinate coord : board.getErrorTiles()){
             if (coord.getY() * board.getWidth() + coord.getX() < board.getWidth() * board.getHeight()) {
                 addErrorTile(tiles.get(coord.getY() * board.getWidth() + coord.getX()), Constants.ERROR_TILE_MAPPER.get(board.getStartGrid().get(coord.getY())[coord.getX()]));
-
                 addErrorTile(debug_tiles.get(coord.getY() * board.getWidth() + coord.getX()).getId(), Constants.ERROR_TILE_MAPPER.get(board.getStartGrid().get(coord.getY())[coord.getX()]));
-
             }
         }
     }
