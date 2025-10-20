@@ -144,7 +144,7 @@ public class Referee extends AbstractReferee {
     public int[] checkOutputs(List<String> outputs){
 
         if (outputs.size() != 1){gameManager.loseGame("You did not send a single input.");}
-        String[] arr = outputs.get(0).split(" ");
+        String[] arr = outputs.get(0).split(" ",-1);
         int[] values = new int[5];
 
         try{
@@ -176,8 +176,7 @@ public class Referee extends AbstractReferee {
             return null;
         }
         catch (NumberFormatException e){
-            String[] error = e.getMessage().split(" ");
-            errorMessage = "One or more of the inputs was invalid: " + error[error.length-1];
+            errorMessage = "One or more of the inputs were invalid.";
             return null;
         }
         catch (Exception e) {
@@ -207,7 +206,7 @@ public class Referee extends AbstractReferee {
 
         // Check for bounds of provided coordinates.
         if (y1 < 0 || y1 >= board.getHeight() || y2 < 0 || y2 >= board.getHeight() || x1 < 0 || x1 >= board.getWidth() || x2 < 0 || x2 >= board.getWidth()){
-            throw new Exception("One or both of the inputs is out of bounds.");
+            throw new Exception("One or both of the inputs were out of bounds.");
         }
 
         // Check in straight line or same input.
