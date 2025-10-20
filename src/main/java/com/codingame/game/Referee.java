@@ -201,12 +201,12 @@ public class Referee extends AbstractReferee {
         // NOTE: These checks are general checks for correctness - Additional checks in Board.isValid().
         // Check for valid number.
         if (!board.getColourIdentifiers().contains(number)){
-            throw new Exception("Invalid colour identifier provided.");
+            throw new Exception("Invalid colour identifier was provided.");
         }
 
         // Check for bounds of provided coordinates.
         if (y1 < 0 || y1 >= board.getHeight() || y2 < 0 || y2 >= board.getHeight() || x1 < 0 || x1 >= board.getWidth() || x2 < 0 || x2 >= board.getWidth()){
-            throw new Exception("One or both of the inputs were out of bounds.");
+            throw new Exception("One or more of the inputs were out of bounds.");
         }
 
         // Check in straight line or same input.

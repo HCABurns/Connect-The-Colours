@@ -180,12 +180,12 @@ public class Board {
 
                 // Connection already made
                 if (connections.containsKey(coord1) && connections.get(coord1).contains(coord2)){
-                    throw new Exception("All or part of the connection is already made.");
+                    throw new Exception("All or part of the connection was already made.");
                 }
 
                 // Ensure only one connection out of a start node.
                 if (allStartColours.contains(coord1) && connections.get(coord1).size() == 1 || allStartColours.contains(coord2) && connections.get(coord2).size() == 1){
-                    throw new Exception("Can't connect more than two paths to a starting tile.");
+                    throw new Exception("Can't connect more than one path to a starting tile.");
                 }
 
                 // Two connections out of the tiles
@@ -196,7 +196,7 @@ public class Board {
                 // Ensure connection matches the value.
                 if (coord1.getNumber() != '.' && colourIdentifier != coord1.getNumber() ||
                         coord2.getNumber() != '.' && colourIdentifier != coord2.getNumber()){
-                    throw new Exception("Can't connect two colours together.");
+                    throw new Exception("Can't connect two different colours together.");
                 }
 
                 // Add connections between the tiles.
