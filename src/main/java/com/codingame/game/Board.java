@@ -175,7 +175,7 @@ public class Board {
                 // Ensure that a start node is not being converted to a new value.
                 if (allStartColours.contains(coord1) && startGrid.get(coord1.getY())[coord1.getX()] != colourIdentifier ||
                         allStartColours.contains(coord2) && startGrid.get(coord2.getY())[coord2.getX()] != colourIdentifier){
-                    throw new Exception("Can't connect a different colour to a starting tile.");
+                    throw new Exception("Incorrect colour connected to a starting tile.");
                 }
 
                 // Connection already made
