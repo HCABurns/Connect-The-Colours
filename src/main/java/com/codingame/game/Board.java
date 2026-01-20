@@ -107,12 +107,21 @@ public class Board {
         if (single_connectors){return false;}
 
         // Check all are connected.
-        for (Coordinate coordinate : startColours){
-            char number = coordinate.getNumber();
-            if (!paths.containsKey(number)){return false;}
-            connected += paths.get(number).size();
+        Set<Coordinate> seen = new HashSet<>();
+        ArrayList<Coordinate> to_check = new ArrayList<>(startColours);
+
+        while (!to_check.isEmpty()){
+            Coordinate coordinate = to_check.remove(0);
+            seen.add(coordinate);
+            for (Coordinate coord: connections.get(coordinate)){
+                if (!seen.contains(coord)){
+                    to_check.add(coord);
+                    connected += 1;
+                }
+            }
         }
-        return connected == h*w;
+        connected += startColours.size();
+        return connected == (h*w);
     }
 
     /**
